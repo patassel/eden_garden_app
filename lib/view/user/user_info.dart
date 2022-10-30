@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eden_garden/model/user_db.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 
@@ -10,8 +8,6 @@ import 'package:eden_garden/controllers/globals.dart' as global;
 class UserInfoScreen extends StatefulWidget {
   final String from;
   final UserDB user;
-  //final Function()? function;
-
 
   const UserInfoScreen({Key? key, required this.from, required this.user}) : super(key: key) ;
 
@@ -24,17 +20,12 @@ class UserInfoScreen extends StatefulWidget {
 class _UserInfoScreenState extends State<UserInfoScreen> {
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
   late bool themeSwitchVal = global.themeAppDark;  // true = dark
-
-  late DocumentReference<Map<String, dynamic>> docUser ;
 
 
   @override
   void initState() {
     super.initState();
-
-    docUser = FirebaseFirestore.instance.collection('users').doc(widget.user.pseudo);
 
   }
 
@@ -109,7 +100,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             : global.ColorTheme().colorFromLight ),
                         title: Text("Full name", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
                             : global.ColorTheme().colorFromLight )),
-                        subtitle: Text("FBH", style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
+                        subtitle: Text(widget.user.fullName, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
                             : Colors.blueGrey)),
                         onTap: () {print("full name button");},
                     )
@@ -124,7 +115,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             : global.ColorTheme().colorFromLight ),
                         title: Text("Pseudo", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
                             : global.ColorTheme().colorFromLight )),
-                      subtitle: Text("pata", style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
+                      subtitle: Text(widget.user.pseudo, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
                           : Colors.blueGrey)),
                       onTap: () {print("Pseudo button");},
                     )
@@ -139,7 +130,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             : global.ColorTheme().colorFromLight ),
                         title: Text("Phone Number", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
                             : global.ColorTheme().colorFromLight )),
-                      subtitle: Text("04", style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
+                      subtitle: Text(widget.user.phone, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
                           : Colors.blueGrey)),
                       onTap: () {print("phone button");},
                     )
@@ -153,7 +144,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             : global.ColorTheme().colorFromLight ),
                         title: Text("Email", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
                             : global.ColorTheme().colorFromLight )),
-                        subtitle: Text("@gmail", style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
+                        subtitle: Text(widget.user.email, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
                             : Colors.blueGrey)),
                         onTap: () {print("gmail button");},
                         )

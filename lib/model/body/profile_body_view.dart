@@ -1,4 +1,5 @@
 import 'package:eden_garden/controllers/route_management.dart';
+import 'package:eden_garden/model/user_db.dart';
 import 'package:eden_garden/view/user/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:eden_garden/controllers/globals.dart' as global;
@@ -20,7 +21,6 @@ class ProfileBodyView extends StatelessWidget {
     return Column(
       children: [
         /// BODY VIEW  ---------------------------------------------------
-
 
         SizedBox(height: profileZoom ? 45 : 100,),
 

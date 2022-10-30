@@ -1,14 +1,11 @@
+import 'package:eden_garden/controllers/dataBase_controller.dart';
 import 'package:eden_garden/model/drawer/drawer_style.dart';
 import 'package:eden_garden/model/body/profile_body_view.dart';
 import 'package:eden_garden/model/bottomNavigation/simpleBottomBar.dart';
 import 'package:eden_garden/model/button/button_circle.dart';
-import 'package:eden_garden/model/user_db.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eden_garden/controllers/globals.dart' as global;
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 
 
 
@@ -33,11 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool profileEdit = false;
   late bool profileZoom = false;
   late bool orientationPortrait = false;
+  late bool errorDataException = false;
 
-  late CollectionReference<Map<String, dynamic>> docUser ;
 
   int count = 0;
-
 
   late GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -45,56 +41,21 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     from = widget.from;
-    docUser = FirebaseFirestore.instance.collection('users');
 
-
+    /// Initiate User Object
+    getUserDB("pfTjVgNet8ggVpNOAfas");
   }
 
 
-  initiateSetState() {
-    setState(() {
+  initiateSetState() {setState(() {});}
 
-    });
-    //print(profileZoom);
-    //print(profileEdit);
-  }
+   getUserDB(String id) {
 
-  Future createUser(String name) async{
-
-/*
-    final newUser = UserDB(
-      fullName: 'Fayssal Ben Hammou',
-      pseudo: 'pata',
-      password: 'p',
-      phone: '04',
-      email: '@gmail',
-    );
-
-
-
-    await docUser.doc('pfTjVgNet8ggVpNOAfas').set(newUser.returnJson());
-
-
- */
-
-
-
-
-
-
-/*
-
-    final docRef = docUser.doc("ffejVgNet8ggVpNOAfas");
-
-    docRef.get().then(
-          (DocumentSnapshot doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        print(data['fullName']);
-      },
-      onError: (e) => print("Error getting document: $e"),
-    );
-
- */
+    try {
+          dataBaseRead(id);
+    } on Exception catch (e) {
+      errorDataException = true;
+    }
 
   }
 
@@ -204,9 +165,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (profileZoom){profileZoom = false;}
                           else{
                             profileEdit = !profileEdit;
-                            createUser("Jhon ${count}");
-                            count++;
-                            print("count ${count}");
 
                           }
                           initiateSetState();
@@ -259,3 +217,42 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
+
+/// WRITE TO DB
+/*
+
+    final newUser = UserDB(
+      fullName: 'Fayssal Ben Hammou',
+      pseudo: 'pata',
+      password: 'p',
+      phone: '04',
+      email: '@gmail',
+    );
+
+
+
+    await docUser.doc('pfTjVgNet8ggVpNOAfas').set(newUser.returnJson());
+
+
+ */
+
+
+
+
+
+/// READ TO DB
+/*
+
+    final docRef = docUser.doc("ffejVgNet8ggVpNOAfas");
+
+    docRef.get().then(
+          (DocumentSnapshot doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        print(data['fullName']);
+      },
+      onError: (e) => print("Error getting document: $e"),
+    );
+
+ */

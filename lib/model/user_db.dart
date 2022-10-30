@@ -2,15 +2,11 @@
 
 class UserDB {
 
-  late final String fullName;
-  late final String phone;
-  late final String email;
-  late final String password;
-  late final String pseudo;
-
-
-  //
-  // late final ImageProvider image;
+  late  String fullName;
+  late  String phone;
+  late  String email;
+  late  String password;
+  late  String pseudo;
 
   UserDB({required this.fullName, this.phone = "phone",  this.pseudo = "pseudo", this.email = "email", this.password = "password"});
 
@@ -29,6 +25,17 @@ class UserDB {
       "password": password,
     };
     return ret;
+  }
+
+  void fromJson(Map<String, dynamic> js) {
+
+    fullName = js['fullName'];
+    email = js['email'];
+    pseudo = js['pseudo'];
+    phone = js['phone'];
+    password = js['password'];
+
+
   }
 
 
