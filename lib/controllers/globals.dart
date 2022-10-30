@@ -1,5 +1,6 @@
 library my_prj.globals;
 
+import 'package:eden_garden/model/user_db.dart';
 import 'package:flutter/animation.dart';
 
 String currentPlatform = "web"; // Current platform environment
@@ -7,6 +8,8 @@ String currentPlatform = "web"; // Current platform environment
 bool themeAppDark = true; // If true app is on Dark theme else Light theme
 
 int currentPage = 0;
+
+UserDB currentUser = UserDB(fullName: 'user');
 
 
 class ColorTheme {

@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eden_garden/model/user_db.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 
@@ -6,10 +9,11 @@ import 'package:eden_garden/controllers/globals.dart' as global;
 
 class UserInfoScreen extends StatefulWidget {
   final String from;
+  final UserDB user;
   //final Function()? function;
 
 
-  const UserInfoScreen({Key? key, required this.from}) : super(key: key) ;
+  const UserInfoScreen({Key? key, required this.from, required this.user}) : super(key: key) ;
 
   @override
   State<UserInfoScreen> createState() => _UserInfoScreenState();
@@ -19,14 +23,18 @@ class UserInfoScreen extends StatefulWidget {
 
 class _UserInfoScreenState extends State<UserInfoScreen> {
 
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  bool themeSwitchVal = global.themeAppDark;  // true = dark
+  late bool themeSwitchVal = global.themeAppDark;  // true = dark
+
+  late DocumentReference<Map<String, dynamic>> docUser ;
 
 
   @override
   void initState() {
     super.initState();
+
+    docUser = FirebaseFirestore.instance.collection('users').doc(widget.user.pseudo);
 
   }
 

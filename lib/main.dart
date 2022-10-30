@@ -7,11 +7,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show Platform;
 
 import 'package:eden_garden/controllers/globals.dart' as global;
-
 import 'package:firebase_core/firebase_core.dart';
-import 'controllers/firebase_options.dart';
 
 Future<void> main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   if (kIsWeb){
     global.currentPlatform = "web";
@@ -29,11 +30,7 @@ Future<void> main() async {
 
     }
 
-    /*await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
 
-     */
 
   }
   runApp(
@@ -47,7 +44,7 @@ Future<void> main() async {
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
         '/home': (context) => const HomeScreen(from: "main"),
-        '/userInfo': (context) => const UserInfoScreen(from: "main"),
+        '/userInfo': (context) => UserInfoScreen(from: "main", user:global.currentUser),
         '/settings': (context) => const SettingsScreen(from: "main"),
 
 

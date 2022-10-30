@@ -39,7 +39,11 @@ dependencies:
 
   # Install Firebase (flutterfire)
   # https://firebase.flutter.dev/docs/cli/
+  # https://www.youtube.com/watch?v=ErP_xomHKTw
   firebase_core: ^2.1.1
+
+  # https://pub.dev/packages/cloud_firestore/install
+  cloud_firestore: ^4.0.3
 
 dev_dependencies:
   flutter_test:

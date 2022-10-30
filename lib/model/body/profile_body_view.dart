@@ -35,7 +35,7 @@ class ProfileBodyView extends StatelessWidget {
             Navigator.push(  // push -> Add route on stack
               context,
               FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
-                page: const UserInfoScreen(from: "home",), //ContactScreen(),
+                page: UserInfoScreen(from: "home", user: global.currentUser,), //ContactScreen(),
                 routeName: '/userInfo',
               ),
             ) ;},

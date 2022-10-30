@@ -2,9 +2,14 @@ import 'package:eden_garden/model/drawer/drawer_style.dart';
 import 'package:eden_garden/model/body/profile_body_view.dart';
 import 'package:eden_garden/model/bottomNavigation/simpleBottomBar.dart';
 import 'package:eden_garden/model/button/button_circle.dart';
+import 'package:eden_garden/model/user_db.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eden_garden/controllers/globals.dart' as global;
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 
 
 class HomeScreen extends StatefulWidget {
@@ -29,14 +34,19 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool profileZoom = false;
   late bool orientationPortrait = false;
 
+  late CollectionReference<Map<String, dynamic>> docUser ;
+
+  int count = 0;
 
 
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  late GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     from = widget.from;
+    docUser = FirebaseFirestore.instance.collection('users');
+
 
   }
 
@@ -47,6 +57,45 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     //print(profileZoom);
     //print(profileEdit);
+  }
+
+  Future createUser(String name) async{
+
+/*
+    final newUser = UserDB(
+      fullName: 'Fayssal Ben Hammou',
+      pseudo: 'pata',
+      password: 'p',
+      phone: '04',
+      email: '@gmail',
+    );
+
+
+
+    await docUser.doc('pfTjVgNet8ggVpNOAfas').set(newUser.returnJson());
+
+
+ */
+
+
+
+
+
+
+/*
+
+    final docRef = docUser.doc("ffejVgNet8ggVpNOAfas");
+
+    docRef.get().then(
+          (DocumentSnapshot doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        print(data['fullName']);
+      },
+      onError: (e) => print("Error getting document: $e"),
+    );
+
+ */
+
   }
 
 
@@ -147,20 +196,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           if (profileEdit){profileEdit = false;}
                           else{profileZoom = !profileZoom;}
+
                           initiateSetState();
                         },
 
                         onLongPress: () {
                           if (profileZoom){profileZoom = false;}
-                          else{profileEdit = !profileEdit;}
+                          else{
+                            profileEdit = !profileEdit;
+                            createUser("Jhon ${count}");
+                            count++;
+                            print("count ${count}");
 
+                          }
                           initiateSetState();
                         },
                         child:
                         AnimatedSize(
                           duration: const Duration(milliseconds: 1000),
                           curve: Curves.fastLinearToSlowEaseIn,
-                          child: 
+                          child:
                             Hero(
                               tag: 'user',
                               child: ClipOval(
@@ -180,7 +235,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           alignment: const Alignment(0.8, 0),
                           child:
                             ButtonCircle(
-                              onPressed: (){},
+                              onPressed: (){
+                              },
                             )
                         ) : const SizedBox(),
 
