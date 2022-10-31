@@ -6,9 +6,10 @@ import 'package:eden_garden/controllers/globals.dart' as global;
 
 class SimpleBottomBar extends StatelessWidget {
 
+  final String from;
   final Function(int)? onPressed;
 
-  const SimpleBottomBar({Key? key, this.onPressed})
+  const SimpleBottomBar({Key? key, required this.from, this.onPressed})
       : super(key: key);
 
 
@@ -16,10 +17,10 @@ class SimpleBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: Colors.green.shade700, width: 5.0))),
+            border: Border(top: BorderSide(color: from=="home" ? Colors.green.shade700 : from=="search" ? Colors.amber.shade900: Colors.green.shade700, width: 5.0))),
         child: BottomNavigationBar(
           currentIndex: global.currentPage,
-          selectedItemColor: Colors.green.shade700,
+          selectedItemColor: from=="home" ? Colors.green.shade700 : from=="search" ? Colors.amber.shade900 : Colors.green.shade700,
           backgroundColor: global
               .ColorTheme()
               .colorFromDark,

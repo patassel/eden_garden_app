@@ -5,9 +5,15 @@ import 'package:eden_garden/controllers/globals.dart' as global;
 final docUser = FirebaseFirestore.instance;
 
 
-Future dataBaseWrite(String id, Map<String, dynamic> js) async{
+Future dataBaseWriteToUser(String id, Map<String, dynamic> js) async{
 
   await docUser.collection('users').doc(id).set(js);
+
+}
+
+Future dataBaseWriteToId(String id, Map<String, dynamic> js) async{
+
+  await docUser.collection('id').doc(id).set(js);
 
 }
 
@@ -29,6 +35,7 @@ Future dataBaseRead(String id) async{
         (DocumentSnapshot doc) {
           data = doc.data() as Map<String, dynamic>?;
           global.currentUser.fromJson(data!);
+          global.currentUser.setID(id);
     },
     onError: (e) => print("Error getting document: $e"),
   );
@@ -45,7 +52,6 @@ Future dataBaseCheck(String email) async{
       .get();
 
   if (snapShot.exists) {
-
     //print("EXIST ${snapShot.data()!['id']}");
     dataBaseRead(snapShot.data()!['id']);
   }

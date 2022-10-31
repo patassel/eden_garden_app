@@ -1,8 +1,10 @@
 
+import 'package:eden_garden/controllers/route_management.dart';
 import 'package:eden_garden/model/drawer/drawer_style.dart';
 import 'package:eden_garden/model/body/profile_body_view.dart';
 import 'package:eden_garden/model/bottomNavigation/simpleBottomBar.dart';
 import 'package:eden_garden/model/button/button_circle.dart';
+import 'package:eden_garden/view/search_screen.dart';
 import 'package:flutter/material.dart';
 
 //import 'package:eden_garden/controllers/dataBase_controller.dart';
@@ -81,15 +83,28 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer:  AppDrawer(from: "home", function: initiateSetState,),
 
       bottomNavigationBar: SimpleBottomBar(
+        from: "home",
         onPressed: (val){
           global.currentPage = val;
 
           switch (val) {
             case 0:
-              //print('PROFILE ${val}');
+              Navigator.pushReplacement(  // push -> Add route on stack
+                context,
+                FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                  page: const HomeScreen(from: "home"), //ContactScreen(),
+                  routeName: '/home',
+                ),
+              );
               break;
             case 1:
-              //
+              Navigator.pushReplacement(  // push -> Add route on stack
+                context,
+                FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                  page: const SearchScreen(from: "home"), //ContactScreen(),
+                  routeName: '/search',
+                ),
+              );
               break;
             case 2:
               //print('GARDEN ${val}');
@@ -224,42 +239,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
-
-/// WRITE TO DB
-/*
-
-    final newUser = UserDB(
-      fullName: 'Fayssal Ben Hammou',
-      pseudo: 'pata',
-      password: 'p',
-      phone: '04',
-      email: '@gmail',
-    );
-
-
-
-    await docUser.doc('pfTjVgNet8ggVpNOAfas').set(newUser.returnJson());
-
-
- */
-
-
-
-
-
-/// READ TO DB
-/*
-
-    final docRef = docUser.doc("ffejVgNet8ggVpNOAfas");
-
-    docRef.get().then(
-          (DocumentSnapshot doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        print(data['fullName']);
-      },
-      onError: (e) => print("Error getting document: $e"),
-    );
-
- */

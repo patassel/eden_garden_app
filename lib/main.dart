@@ -2,7 +2,7 @@ import 'package:eden_garden/view/home_screen.dart';
 import 'package:eden_garden/view/login_screen.dart';
 import 'package:eden_garden/view/settings_screen.dart';
 import 'package:eden_garden/view/signUp_screen.dart';
-import 'package:eden_garden/view/user/user_info.dart';
+import 'package:eden_garden/view/user/user_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 

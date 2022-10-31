@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 25,
               ),
               buildTapToLogin(),
-              connexionError ? buildReturnConnexion() : const SizedBox(),
+              connexionError ? buildReturnDialog() : const SizedBox(),
               buildTapToSignup(context),
             ],
           ),
@@ -170,6 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
             dataBaseRead(snapShot.data()!['id']);
           }
 
+          await Future.delayed(const Duration(milliseconds: 500), () {});
 
           /// Check password error
           if(documentExist){
@@ -183,15 +184,12 @@ class _LoginScreenState extends State<LoginScreen> {
             connexionReturn = "Email invalid";
             connexionError = true;
           }
-
-
-
             setState(() {
 
             });
 
-
             if (connexionReturn=="Connexion successful") {
+
               setState(() {loadingPage = true;});
 
               await Future.delayed(const Duration(milliseconds: 8000), () {});
@@ -204,8 +202,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   routeName: '/home',
                 ),
               );
+              await Future.delayed(const Duration(milliseconds: 800), () {});
 
               setState(() {loadingPage = false;});
+
+              connexionError = false;
+
 
             }
         },
@@ -281,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget buildReturnConnexion() {
+  Widget buildReturnDialog() {
     return Padding(
       padding: const EdgeInsets.only(top: 25, left: 10),
       child: Center(child :Column(
