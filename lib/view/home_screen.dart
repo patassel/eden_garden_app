@@ -200,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               tag: 'user',
                               child: ClipOval(
                                     child : Image.network(
-                                      'https://firebasestorage.googleapis.com/v0/b/eden-garden-bcf0f.appspot.com/o/Users%2Fuser1.jpg?alt=media&token=eb3fdca0-1520-49bb-bcaa-9793655b5657',
+                                      'https://firebasestorage.googleapis.com/v0/b/eden-garden-bcf0f.appspot.com/o/Users%2Fphoto%20cv.PNG?alt=media&token=33288792-8970-4496-8541-fd0f46b8d9c6',
                                       width: profileZoom ? screenWidth*0.8: 150,
                                       height: profileZoom ? screenHeight*0.4:  150,
                                       fit: BoxFit.cover,

@@ -11,6 +11,7 @@ class SlideAnimationController extends StatefulWidget {
   State<SlideAnimationController>  createState() => _ShowUpState();
 }
 
+
 class _ShowUpState extends State<SlideAnimationController> with TickerProviderStateMixin {
   late AnimationController _animController;
   late Animation<Offset> _animOffset;
@@ -38,8 +39,9 @@ class _ShowUpState extends State<SlideAnimationController> with TickerProviderSt
 
   @override
   void dispose() {
-    super.dispose();
     _animController.dispose();
+    super.dispose();
+
   }
 
   @override

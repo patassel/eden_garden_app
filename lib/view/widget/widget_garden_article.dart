@@ -66,15 +66,17 @@ class GardenArticleWidget extends StatefulWidget {
                         )
                           ),
 
-
                 ButtonTextDivider(
                   title: 'Learn More',
                   colorText: flagOnHover? const Color(0xFFFF7043) : Colors.black,
                   colorDivider: flagOnHover? const Color(0xFFFF7043) : Colors.black,
                   onclickButton: () {
+                    flagOnHover= !flagOnHover;
+                    setState(() {
 
+                    });
                   },
-                  widthDivider: flagOnHover? 80 : 30,
+                  widthDivider: flagOnHover? 60 : 30,
                   onHoverMouse: (val ) {
                       flagOnHover = val;
                       setState(() {
