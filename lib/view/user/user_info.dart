@@ -1,3 +1,5 @@
+import 'package:eden_garden/controllers/dataBase_controller.dart';
+import 'package:eden_garden/model/button/button_rect.dart';
 import 'package:eden_garden/model/user_db.dart';
 import 'package:flutter/material.dart';
 
@@ -23,15 +25,197 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   late bool themeSwitchVal = global.themeAppDark;  // true = dark
 
 
+  late double screenWidth ;
+  late double screenHeight ;
+  late bool orientationPortrait = false;
+
+  late String valueField;
+  final TextEditingController _textFieldController = TextEditingController();
+  late FocusNode textFocusNode = FocusNode();
+  late bool focus = false;
+  late Color colorTextSave = global.ColorTheme().colorFromLight;
+  late Color colorTextCancel = global.ColorTheme().colorFromLight;
+
+
   @override
   void initState() {
     super.initState();
+  }
 
+
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    textFocusNode.dispose();
+
+    super.dispose();
+  }
+
+
+
+  initiateSetState() {setState(() {});}
+
+
+  Future<void> _displayTextInputDialog(BuildContext context, String title, String oldValue) async {
+    return showDialog(
+        context: context,
+        builder:
+            (context) => StatefulBuilder(builder : (context, setState)  => AlertDialog(
+                title: Center(child :
+                Text(
+                    title=="name" ? "Enter a new full name" :
+                    title=="pw" ? "Enter a new password" :
+                    title=="ps" ? "Enter a new pseudo" :
+                    title=="e" ? "Enter a new email" :
+                    title=="ph" ? "Enter a new phone number" : "Error!",
+                    style: TextStyle(
+                      color: global.ColorTheme().colorFromLight,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'meri',
+                      fontSize: 22),
+
+                )),
+                content: SizedBox(
+                    height: screenHeight*0.1,
+                    width: screenWidth*0.8,
+                    child :Center(
+                        child:TextField(
+                          onSubmitted: (val){
+                            textFocusNode.unfocus();
+                            setState(() {});
+                          },
+
+                          onChanged: (value) {
+                              valueField = value;
+                              setState(() {});
+                          },
+
+                          onTap: () {
+                            setState(()
+                            {
+                              if (textFocusNode.hasFocus){
+                                textFocusNode.unfocus();
+                                focus=false;
+                              }else{
+                              textFocusNode.requestFocus();
+                              focus=true;
+                              }
+                            });
+                          },
+
+                          controller: _textFieldController,
+                          decoration: InputDecoration(hintText: oldValue),
+
+
+                        )),
+                ),
+                actions: <Widget>[
+
+                  (!orientationPortrait && !textFocusNode.hasFocus) || (orientationPortrait && !textFocusNode.hasFocus) ? ButtonRect(
+                    title: "CANCEL",
+                    colorBorder: Colors.transparent,
+                    colorBackground: Colors.transparent,
+                    colorHover: Colors.black,
+                    colorText: global.ColorTheme().colorDeepDark,
+                    onclickButton: () {
+                      setState(() =>Navigator.pop(context));
+
+                    },
+                    onHoverMouse: (val) {
+
+                      setState(()
+                      {
+                      if (val) {
+                        colorTextCancel = Colors.white;
+                      }else{
+                        colorTextCancel = global.ColorTheme().colorFromLight;
+                      }
+                      });
+                    },
+                  ) : const SizedBox(),
+                  SizedBox(width: orientationPortrait ?  screenWidth*0.28: screenWidth*0.65,),
+                  (!orientationPortrait && !textFocusNode.hasFocus) || (orientationPortrait && !textFocusNode.hasFocus) ? ButtonRect(
+                    title: "SAVE",
+                    colorBorder: Colors.transparent,
+                    colorBackground: Colors.transparent,
+                    colorHover: Colors.black,
+                    colorText: global.ColorTheme().colorFromDarkSub,
+
+                    onclickButton: () {
+
+                      switch (title) {
+                        case "name":
+                          //dataBaseUpdate(widget.user.id, "fullName", _textFieldController.value.text);
+                          widget.user.setName(_textFieldController.value.text);
+                          break;
+                        case "ps":
+
+                          try {
+                            dataBaseUpdate(widget.user.id, "pseudo", _textFieldController.value.text);
+                          } on Exception catch (e) {
+                            print(e);
+                          }
+                          widget.user.setPseudo(_textFieldController.value.text);
+
+                          break;
+                        case "ph":
+                          try {
+                            dataBaseUpdate(widget.user.id, "phone", _textFieldController.value.text);
+                          } on Exception catch (e) {
+                            print(e);
+                          }
+                          widget.user.setPhone(_textFieldController.value.text);
+                          break;
+                        case "e":
+                          try {
+                            dataBaseUpdate(widget.user.id, "email", _textFieldController.value.text);
+                          } on Exception catch (e) {
+                            print(e);
+                          }
+                          dataBaseUpdate(widget.user.id, "email", _textFieldController.value.text);
+                          widget.user.setEmail(_textFieldController.value.text);
+                          break;
+                        case "pw":
+                          try {
+                            dataBaseUpdate(widget.user.id, "password", _textFieldController.value.text);
+                          } on Exception catch (e) {
+                            print(e);
+                          }
+                          widget.user.setPassword(_textFieldController.value.text);
+                        break;
+                      }
+
+                      initiateSetState();
+                      Navigator.pop(context);
+
+                    },
+
+                    onHoverMouse: (val) {
+                      if (val) {
+                        colorTextSave = Colors.white;
+                      }else{
+                        colorTextSave = global.ColorTheme().colorFromLight;
+                      }
+                      setState(() {});
+                    },
+
+
+                  ) : SizedBox(),
+
+
+                ],
+              )
+        ));
   }
 
 
   @override
   Widget build(BuildContext context) {
+
+    screenWidth = MediaQuery.of(context).size.width;
+    screenHeight = MediaQuery.of(context).size.height;
+    orientationPortrait =  MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
 
         key: scaffoldKey,
@@ -102,7 +286,11 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             : global.ColorTheme().colorFromLight )),
                         subtitle: Text(widget.user.fullName, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
                             : Colors.blueGrey)),
-                        onTap: () {print("full name button");},
+                        onTap: () {
+                        _textFieldController.clear();
+                        _displayTextInputDialog(context, "name", widget.user.fullName);
+                        //initiateSetState();
+                        },
                     )
                   ),
                   const Divider(),
@@ -117,7 +305,10 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             : global.ColorTheme().colorFromLight )),
                       subtitle: Text(widget.user.pseudo, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
                           : Colors.blueGrey)),
-                      onTap: () {print("Pseudo button");},
+                      onTap: () {
+                        _textFieldController.clear();
+                        _displayTextInputDialog(context, "ps", widget.user.pseudo);
+                      },
                     )
                   ),
                   const Divider(),
@@ -132,7 +323,10 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             : global.ColorTheme().colorFromLight )),
                       subtitle: Text(widget.user.phone, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
                           : Colors.blueGrey)),
-                      onTap: () {print("phone button");},
+                      onTap: () {
+                        _textFieldController.clear();
+                        _displayTextInputDialog(context, "ph", widget.user.phone);
+                      },
                     )
                   ),
                   const Divider(),
@@ -146,7 +340,10 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             : global.ColorTheme().colorFromLight )),
                         subtitle: Text(widget.user.email, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
                             : Colors.blueGrey)),
-                        onTap: () {print("gmail button");},
+                        onTap: () {
+                          _textFieldController.clear();
+                          _displayTextInputDialog(context, "e", widget.user.email);
+                        },
                         )
                   ),
 
@@ -170,7 +367,10 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             : global.ColorTheme().colorFromLight )),
                         subtitle: Text("******", style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
                             : Colors.blueGrey)),
-                        onTap: () {print("password button");},
+                        onTap: () {
+                          _textFieldController.clear();
+                          _displayTextInputDialog(context, "pw", widget.user.password);
+                        },
                       )
                   ),
                   const Divider(),
@@ -222,49 +422,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 ),
 
                  */
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text("Services", style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w600,
-                          color: themeSwitchVal ? Colors.white : Colors.green)),
-                    ],
-                  ),
-                  Material(
-                      type: MaterialType.transparency,
-                      child :ListTile(
-                        hoverColor: global.ColorTheme().buttonFromLight,
-                        leading: Icon(Icons.file_open_outlined, color: global.themeAppDark ? global.ColorTheme().colorFromDark
-                            : global.ColorTheme().colorFromLight ),
-                        title: Text("Terms of Service", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
-                            : global.ColorTheme().colorFromLight )),
-                        onTap: () {print("language button");},
 
-                      )),
-                  const Divider(),
-                  Material(
-                      type: MaterialType.transparency,
-                      child :ListTile(
-                        hoverColor: global.ColorTheme().buttonFromLight,
-                        leading: Icon(Icons.file_copy_outlined, color: global.themeAppDark ? global.ColorTheme().colorFromDark
-                            : global.ColorTheme().colorFromLight ),
-                        title: Text("Open Source and Licences", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
-                            : global.ColorTheme().colorFromLight )),
-                        onTap: () {print("language button");},
-
-                      )),
-                  const Divider(),
-                  Material(
-                      type: MaterialType.transparency,
-                      child :ListTile(
-                        hoverColor: global.ColorTheme().buttonFromLight,
-                        leading: Icon(Icons.exit_to_app, color: global.themeAppDark ? global.ColorTheme().colorFromDark
-                            : global.ColorTheme().colorFromLight ),
-                        title: Text("Sign Out", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
-                            : global.ColorTheme().colorFromLight )),
-                        onTap: () {print("language button");},
-
-                      )),
                 ],
               ),
             ),

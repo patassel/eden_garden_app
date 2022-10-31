@@ -8,11 +8,33 @@ class UserDB {
   late  String password;
   late  String pseudo;
 
-  UserDB({required this.fullName, this.phone = "phone",  this.pseudo = "pseudo", this.email = "email", this.password = "password"});
+  late String id;
+
+  UserDB({required this.id, required this.fullName, this.phone = "phone",  this.pseudo = "pseudo", this.email = "email", this.password = "password"});
 
 
-  void setTitle(String _fullName){
-    fullName = _fullName;
+  void setID(String newID){
+    id = newID;
+  }
+
+  void setName(String newFullName){
+    fullName = newFullName;
+  }
+
+  void setPhone(String newPhone){
+    phone = newPhone;
+  }
+
+  void setPseudo(String newPs){
+    pseudo = newPs;
+  }
+
+  void setEmail(String newEmail){
+    email = newEmail;
+  }
+
+  void setPassword(String newPassword){
+    password = newPassword;
   }
 
   Map<String, dynamic> returnJson()  {

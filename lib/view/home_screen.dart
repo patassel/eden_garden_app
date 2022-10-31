@@ -1,9 +1,12 @@
-import 'package:eden_garden/controllers/dataBase_controller.dart';
+
 import 'package:eden_garden/model/drawer/drawer_style.dart';
 import 'package:eden_garden/model/body/profile_body_view.dart';
 import 'package:eden_garden/model/bottomNavigation/simpleBottomBar.dart';
 import 'package:eden_garden/model/button/button_circle.dart';
 import 'package:flutter/material.dart';
+
+//import 'package:eden_garden/controllers/dataBase_controller.dart';
+//import 'package:eden_garden/controllers/route_management.dart';
 
 import 'package:eden_garden/controllers/globals.dart' as global;
 
@@ -24,12 +27,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late String from;
   late TextTheme textTheme;
+
   late double screenWidth ;
   late double screenHeight ;
+  late bool orientationPortrait = false;
+
 
   late bool profileEdit = false;
   late bool profileZoom = false;
-  late bool orientationPortrait = false;
   late bool errorDataException = false;
 
 
@@ -43,13 +48,13 @@ class _HomeScreenState extends State<HomeScreen> {
     from = widget.from;
 
     /// Initiate User Object
-    getUserDB("pfTjVgNet8ggVpNOAfas");
+    //getUserDB("pfTjVgNet8ggVpNOAfas");
   }
 
 
   initiateSetState() {setState(() {});}
 
-   getUserDB(String id) {
+   /*getUserDB(String id) {
 
     try {
           dataBaseRead(id);
@@ -58,6 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
   }
+
+    */
 
 
   @override
@@ -82,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
               //print('PROFILE ${val}');
               break;
             case 1:
-              //print('SEARCH ${val}');
+              //
               break;
             case 2:
               //print('GARDEN ${val}');

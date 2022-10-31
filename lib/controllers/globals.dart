@@ -9,7 +9,9 @@ bool themeAppDark = true; // If true app is on Dark theme else Light theme
 
 int currentPage = 0;
 
-UserDB currentUser = UserDB(fullName: 'user');
+UserDB currentUser = UserDB(fullName: 'user', id: 'id');
+
+bool currentUserExist = false;
 
 
 class ColorTheme {

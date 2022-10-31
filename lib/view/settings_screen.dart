@@ -1,3 +1,4 @@
+import 'package:eden_garden/controllers/route_management.dart';
 import 'package:flutter/material.dart';
 
 
@@ -247,7 +248,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           : global.ColorTheme().colorFromLight ),
                       title: Text("Sign Out", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
                           : global.ColorTheme().colorFromLight )),
-                      onTap: () {print("language button");},
+                      onTap: () {
+
+
+                        Navigator.of(context).popUntil(ModalRoute.withName('/login'));
+
+                      },
 
                     )),
                   ],
