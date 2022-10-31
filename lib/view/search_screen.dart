@@ -1,7 +1,10 @@
 import 'package:eden_garden/controllers/route_management.dart';
+import 'package:eden_garden/model/article/garden_article.dart';
+import 'package:eden_garden/model/article/list_article_garden.dart';
 import 'package:eden_garden/model/bottomNavigation/simpleBottomBar.dart';
 import 'package:eden_garden/model/drawer/drawer_style.dart';
 import 'package:eden_garden/view/home_screen.dart';
+import 'package:eden_garden/view/widget/widget_grid_garden_article.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eden_garden/controllers/globals.dart' as global;
@@ -37,6 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   late bool prefixIcon = true;
 
+  late GardenArticleList listOfGardenArticle;
 
 
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -45,6 +49,25 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
     from = widget.from;
+
+    listOfGardenArticle = GardenArticleList.fromList(
+        [
+      GardenArticle(title : "Garden tomato"),
+      GardenArticle(title : "Lemon",),
+          GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),GardenArticle(title : "Garden tomato"),
+          GardenArticle(title : "Lemon",),
+    ]);
 
   }
 
@@ -142,60 +165,60 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: [
                 Padding(
                 padding: const EdgeInsets.only(top: 15, left: 5, right: 5),
-            child:
-            Center(
-                        child: TextField(
+                child:
+                Center(
+                    child: TextField(
 
-                          focusNode: textFocusNode,
-                          style: TextStyle(
-                                color: global.themeAppDark ? global.ColorTheme().colorFromDark : global.ColorTheme().colorFromLight,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 24,),
+                  focusNode: textFocusNode,
+                  style: TextStyle(
+                        color: global.themeAppDark ? global.ColorTheme().colorFromDark : global.ColorTheme().colorFromLight,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 24,),
 
-                        onSubmitted: (val){
+                onSubmitted: (val){
+                  textFocusNode.unfocus();
+                  initiateSetState();
+                  },
+
+                    onChanged: (value) {
+                      valueField = value;
+                      initiateSetState();
+                    },
+
+                    onTap: () {
+
+                        if (textFocusNode.hasFocus){
                           textFocusNode.unfocus();
-                          initiateSetState();
-                          },
+                          focus=false;
+                        }else{
+                          textFocusNode.requestFocus();
+                          focus=true;
+                        }
+                        initiateSetState();
 
-                            onChanged: (value) {
-                              valueField = value;
-                              initiateSetState();
-                            },
+                    },
 
-                            onTap: () {
-
-                                if (textFocusNode.hasFocus){
-                                  textFocusNode.unfocus();
-                                  focus=false;
-                                }else{
-                                  textFocusNode.requestFocus();
-                                  focus=true;
-                                }
-                                initiateSetState();
-
-                            },
-
-                          controller: _textFieldController,
-                          decoration: prefixIcon ? InputDecoration(
-                              prefixIcon: const Icon(Icons.search, color: Colors.pinkAccent,),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: Colors.pinkAccent),
-                                  borderRadius: BorderRadius.circular(20)),
-                              hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
-                              hintText: "Enter your search here",
-                              border: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: Colors.pinkAccent),
-                                  borderRadius: BorderRadius.circular(20))) :
-                          InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: Colors.pinkAccent),
-                                  borderRadius: BorderRadius.circular(20)),
-                              hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
-                              hintText: "Enter your search here",
-                              border: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: Colors.pinkAccent),
-                                  borderRadius: BorderRadius.circular(20))),
-                            ))),
+                  controller: _textFieldController,
+                  decoration: prefixIcon ? InputDecoration(
+                      prefixIcon: const Icon(Icons.search, color: Colors.pinkAccent,),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.pinkAccent),
+                          borderRadius: BorderRadius.circular(20)),
+                      hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
+                      hintText: "Enter your search here",
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.pinkAccent),
+                          borderRadius: BorderRadius.circular(20))) :
+                  InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.pinkAccent),
+                          borderRadius: BorderRadius.circular(20)),
+                      hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
+                      hintText: "Enter your search here",
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.pinkAccent),
+                          borderRadius: BorderRadius.circular(20))),
+                    ))),
 
 
                   ],),
@@ -206,9 +229,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
               /// BODY VIEW  ---------------------------------------------------
 
-              ///PAGE 1 --------------------------
 
-              ///PAGE 1 --------------------------
+              /// GridView of article
+              GridGardenArticleWidget(
+                height: (global.currentPlatform=='and' || global.currentPlatform=='ios') ? 200 : 500,
+                width: (global.currentPlatform=='and' || global.currentPlatform=='ios')? 150: 350,
+                widthScreen: 130, myList: listOfGardenArticle,),
+
+
+              SizedBox(height: 100,),
 
             ],
           ),
