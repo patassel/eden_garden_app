@@ -1,17 +1,24 @@
-# eden_garden (in progress)
+# Eden Garden App(in progress -> Begin 29/10/22)
+
+This application is available on Web, Android, Windows and IOS soon.
+
+I present you up down somes screen.
+
+## What you can find in this project ?
+the project is a management of your garden with statistics and instructions on how you can take care of it
+You'll find a Settings view with a button animate for to change the theme color of the application.
+The database stock your data and give you a space cloud with security. You can share you garden with your
+community and learn informations about other variety of plants and tree.
+
+### Video presentation
 
 
-This app will show you how to product fruits and vegetables in your garden.
 
-## Getting Started
+https://user-images.githubusercontent.com/35902416/199124969-20b41f2f-0f16-4ebc-b283-0c362c3e8db1.mp4
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+https://user-images.githubusercontent.com/35902416/199124764-3a8fbe20-be5e-4d41-a3f9-b65c3a5cf33a.mp4
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## More widgets and tools are coming soon ...!
+
