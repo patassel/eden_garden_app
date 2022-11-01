@@ -33,10 +33,15 @@ class ColorTheme {
     const Color(0xFF212121),];
 
   List<Color> colorsViewBackgroundLight = [
-    const Color(0xFFE1F5FE),
-    const Color(0xFFE3F5FE),
-    const Color(0xFFE3F5FE),
-    const Color(0xFFE1F5FE),];
+    const Color(0xAFAFFFBB),
+
+    //const Color(0xCCACCABB),
+    const Color(0xCCACCABB),
+    const Color(0xCCACCABB),
+
+  //const Color(0xAFAFADD2),
+    const Color(0xCCACCABB),
+  ];
 
   List<Color> colorsDrawBackgroundLight = [
     const Color(0xFF112121),

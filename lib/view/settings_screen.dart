@@ -8,7 +8,6 @@ class SettingsScreen extends StatefulWidget {
   final String from;
   final Function()? function;
 
-
   const SettingsScreen({Key? key, required this.from, this.function }) : super(key: key) ;
 
   @override

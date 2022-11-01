@@ -17,10 +17,10 @@ class SimpleBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: from=="home" ? Colors.green.shade700 : from=="search" ? Colors.amber.shade900: Colors.green.shade700, width: 5.0))),
+            border: Border(top: BorderSide(color: from=="home" ? Colors.lightBlue.shade100 : from=="search" ? Colors.pinkAccent.shade100: Colors.lightGreen.shade300, width: 5.0))),
         child: BottomNavigationBar(
           currentIndex: global.currentPage,
-          selectedItemColor: from=="home" ? Colors.green.shade700 : from=="search" ? Colors.amber.shade900 : Colors.green.shade700,
+          selectedItemColor: from=="home" ? Colors.lightBlue.shade100 : from=="search" ? Colors.pinkAccent.shade100 : Colors.lightGreen.shade300,
           backgroundColor: global
               .ColorTheme()
               .colorFromDark,

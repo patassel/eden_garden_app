@@ -1,7 +1,7 @@
 
 
 import 'package:eden_garden/controllers/slide_animation_controller.dart';
-import 'package:eden_garden/model/article/list_article_garden.dart';
+import 'package:eden_garden/model/garden/article/list_article_garden.dart';
 import 'package:flutter/material.dart';
 
 import 'widget_garden_article.dart';

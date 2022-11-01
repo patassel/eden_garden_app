@@ -1,7 +1,7 @@
 
 
 
-import 'package:eden_garden/model/article/garden_article.dart';
+import 'package:eden_garden/model/garden/article/garden_article.dart';
 
 class GardenArticleList {
   late final List<GardenArticle> articleList ;

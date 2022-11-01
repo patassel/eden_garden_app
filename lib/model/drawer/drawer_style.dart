@@ -90,7 +90,7 @@ class AppDrawer extends StatelessWidget {
           DrawerRoute("Home", "/home" , Icon(Icons.home, color: global.ColorTheme().colorFromDark,), const HomeScreen(from: "drawer"), from=="home"? "pushReplacement" : "push", function!),
 
           Divider(height: 0, color: global.ColorTheme().colorFromLight),
-          DrawerRoute("Settings", "/settings" , Icon(Icons.settings, color: global.ColorTheme().colorFromDark,), const SettingsScreen(from: "drawer"),  "push", function!),
+          DrawerRoute("Settings", "/settings" , Icon(Icons.settings, color: global.ColorTheme().colorFromDark,), SettingsScreen(from: "drawer", function: function!,),  "push", function!),
 
 
         ],

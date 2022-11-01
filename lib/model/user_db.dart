@@ -1,5 +1,7 @@
 
 
+import 'package:eden_garden/model/garden/gardenItem.dart';
+
 class UserDB {
 
   late  String fullName;
@@ -7,10 +9,12 @@ class UserDB {
   late  String email;
   late  String password;
   late  String pseudo;
-
   late String id;
 
-  UserDB({required this.id, required this.fullName, this.phone = "phone",  this.pseudo = "pseudo", this.email = "email", this.password = "password"});
+  late List<GardenItem>? myGarden;
+
+
+  UserDB({required this.id, required this.fullName, this.phone = "phone",  this.pseudo = "pseudo", this.email = "email", this.password = "password", this.myGarden});
 
 
   void setID(String newID){
@@ -56,10 +60,6 @@ class UserDB {
     pseudo = js['pseudo'];
     phone = js['phone'];
     password = js['password'];
-
-
   }
-
-
 
 }

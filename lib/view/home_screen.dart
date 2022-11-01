@@ -4,6 +4,7 @@ import 'package:eden_garden/model/drawer/drawer_style.dart';
 import 'package:eden_garden/model/body/profile_body_view.dart';
 import 'package:eden_garden/model/bottomNavigation/simpleBottomBar.dart';
 import 'package:eden_garden/model/button/button_circle.dart';
+import 'package:eden_garden/view/garden_screen.dart';
 import 'package:eden_garden/view/search_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -107,7 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
               );
               break;
             case 2:
-              //print('GARDEN ${val}');
+              Navigator.pushReplacement(  // push -> Add route on stack
+                context,
+                FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                  page: const GardenScreen(from: "home"), //ContactScreen(),
+                  routeName: '/myGarden',
+                ),
+              );
               break;
           }
           initiateSetState();

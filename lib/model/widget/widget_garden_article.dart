@@ -1,7 +1,7 @@
 
 
 
-import 'package:eden_garden/model/article/garden_article.dart';
+import 'package:eden_garden/model/garden/article/garden_article.dart';
 import 'package:eden_garden/model/button/button_text_underline.dart';
 import 'package:flutter/material.dart';
 import 'package:eden_garden/controllers/globals.dart' as global;

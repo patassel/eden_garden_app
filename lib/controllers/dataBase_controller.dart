@@ -25,6 +25,14 @@ Future dataBaseUpdate(String id, String idKey, String valueKey) async{
 
 }
 
+Future dataBaseAddKey(String id, String idKey, String valueKey) async{
+
+  await docUser.collection('users').doc(id).set(
+      {idKey : valueKey,}
+  );
+
+}
+
 
 Future dataBaseRead(String id) async{
 

@@ -1,5 +1,7 @@
+import 'package:eden_garden/view/garden_screen.dart';
 import 'package:eden_garden/view/home_screen.dart';
 import 'package:eden_garden/view/login_screen.dart';
+import 'package:eden_garden/view/search_screen.dart';
 import 'package:eden_garden/view/settings_screen.dart';
 import 'package:eden_garden/view/signUp_screen.dart';
 import 'package:eden_garden/view/user/user_info_screen.dart';
@@ -48,8 +50,11 @@ Future<void> main() async {
         '/login': (context) => const LoginScreen(from: "main"),
         '/signup': (context) => const SignupScreen(from: "main"),
         '/home': (context) => const HomeScreen(from: "main"),
+        '/search': (context) => const SearchScreen(from: "main"),
         '/userInfo': (context) => UserInfoScreen(from: "main", user:global.currentUser),
+        '/myGarden': (context) => const GardenScreen(from: "main"),
         '/settings': (context) => const SettingsScreen(from: "main"),
+
 
 
 
