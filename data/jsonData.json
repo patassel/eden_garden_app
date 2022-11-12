@@ -1,0 +1,138 @@
+{
+    "Kiwi": 
+        {
+            "sc" : "Actinidia chinensis",
+            "image" : "images.pexels.com/photos/11554677/pexels-photo-11554677.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            "description" : "Kiwis are the fruit of a dioecious climbing plant called the actinidia. The actinidia takes on the appearance of a liana. It is a climbing shrub with deciduous foliage.\n\nThe kiwi has a thin, fuzzy, fibrous, tart but edible light brown skin and light green or golden flesh with rows of tiny, black, edible seeds. The kiwi is exceptionally rich in vitamin C, it is also a source of vitamins K and B9 (folic acid) copper and potassium.",
+            "species" : "Tree",
+            "product" : "Fruit",
+            "environment" : "Kiwifruit can be grown in most temperate climates with adequate summer heat.",
+            "farm" : "The plant appreciates deep and light soils, well-drained with a pH between 6.0 and 6.5. She need a sunny exposure sheltered from the wind.\n\nThe plant is sensitive to cold (from −10°C to −15°C).",
+            "sprinkle" : "When the plant are young, position this in the center of a basin that will be filled once a week in summer. Put a good mulch of straw, RCW (Ramial chipped wood) or even gravel to establish thermal insulation of the very fragile superficial roots.",
+            "prune": "As soon as the leaves fall, there is important to prune this vine. Remove branches that have produced fruit.\n\nRemove branches that have produced fruit. Cut at the <<twig of the year>> which has no lateral branching. The fruits will grow on the first nodes.\n\nWe can therefore leave only 20 or 30 cm of wood but we can also keep more length to trellis in a pergola or vertically.",
+            "harvest" : "Kiwifruit is picked by hand and commercially grown on sturdy support structures, as it can produce several tonnes per hectare, more than the rather weak vines can support.\n\nThese are generally equipped with a watering system for irrigation and frost protection in the spring."
+
+
+        },
+
+    "Tulip":
+        {
+            "sc" : "Tulipa",
+            "image" : "images.pexels.com/photos/69776/tulips-bed-colorful-color-69776.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            "description" : "Plants are tender warm-season",
+            "species" : "Herbs",
+            "product" : "Flower",
+            "environment" : "Plants are tender warm-season",
+            "farm" : "Plants are tender warm-season",
+            "sprinkle" : "Fruit",
+            "prune": "fruit",
+            "harvest" : "fruit"
+
+
+        },
+
+    "Garden tomato": 
+        {
+            "sc" : "Tara vine",
+            "image" : "images.pexels.com/photos/4671829/pexels-photo-4671829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            "description" : "Plants are tender warm-season",
+            "species" : "Herbs",
+            "product" : "Vegetable",
+            "environment" : "Plants are tender warm-season",
+            "farm" : "Plants are tender warm-season",
+            "sprinkle" : "Fruit",
+            "prune": "fruit",
+            "harvest" : "fruit"
+
+        },
+    "Rudbeckia":
+        {
+            "sc" : "Rudbeckia",
+            "image" : "images.pexels.com/photos/5754235/pexels-photo-5754235.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            "description" : "Plants are tender warm-season",
+            "species" : "Herbs",
+            "product" : "Flower",
+            "environment" : "Plants are tender warm-season",
+            "farm" : "Plants are tender warm-season",
+            "sprinkle" : "Fruit",
+            "prune": "fruit",
+            "harvest" : "fruit"
+
+        },
+
+    "Apple": 
+        {
+            "sc" : "Tara vine",
+            "image" : "images.pexels.com/photos/10808817/pexels-photo-10808817.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            "description" : "Plants are tender warm-season",
+            "species" : "Tree",
+            "product" : "Fruit",
+            "environment" : "Plants are tender warm-season",
+            "farm" : "Plants are tender warm-season",
+            "sprinkle" : "Fruit",
+            "prune": "fruit",
+            "harvest" : "fruit"
+
+        },
+
+    "Strawberries":
+        {
+            "sc" : "Tara vine",
+            "image" : "images.pexels.com/photos/298696/pexels-photo-298696.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            "description" : "Plants are tender warm-season",
+            "species" : "Tree",
+            "product" : "Fruit",
+            "environment" : "Plants are tender warm-season",
+            "farm" : "Plants are tender warm-season",
+            "sprinkle" : "Fruit",
+            "prune": "fruit",
+            "harvest" : "fruit"
+
+        },
+
+    "Rosebush":
+        {
+            "sc" : "Rosa",
+            "image" : "images.pexels.com/photos/8237298/pexels-photo-8237298.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            "description" : "Plants are tender warm-season",
+            "species" : "Shrubs",
+            "product" : "Flower",
+            "environment" : "Plants are tender warm-season",
+            "farm" : "Plants are tender warm-season",
+            "sprinkle" : "Fruit",
+            "prune": "fruit",
+            "harvest" : "fruit"
+
+        },
+
+    "Carrot":
+        {
+            "sc" : "Daucus carota",
+            "image" : "images.pexels.com/photos/8245614/pexels-photo-8245614.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            "description" : "Plants are tender warm-season",
+            "species" : "Herbs",
+            "product" : "Vegetable",
+            "environment" : "Plants are tender warm-season",
+            "farm" : "Plants are tender warm-season",
+            "sprinkle" : "Fruit",
+            "prune": "fruit",
+            "harvest" : "fruit"
+
+        },
+
+    "Sunflowers":
+        {
+            "sc" : "Sunflowers",
+            "image" : "images.pexels.com/photos/8646933/pexels-photo-8646933.jpeg",
+            "description" : "Plants are tender warm-season",
+            "species" : "Herbs",
+            "product" : "Flower",
+            "environment" : "Plants are tender warm-season",
+            "farm" : "Plants are tender warm-season",
+            "sprinkle" : "Fruit",
+            "prune": "fruit",
+            "harvest" : "fruit"
+
+        }
+    
+}
