@@ -1,3 +1,4 @@
+import 'package:eden_garden/view/first_screen.dart';
 import 'package:eden_garden/view/garden_screen.dart';
 import 'package:eden_garden/view/home_screen.dart';
 import 'package:eden_garden/view/login_screen.dart';
@@ -33,20 +34,20 @@ Future<void> main() async {
       global.currentPlatform = "ios";
 
     }
-
-
-
   }
+
+
   runApp(
     MaterialApp(
       title: 'Eden Garden',
       // Start the app with the "/" named route. In this case, the app starts
       // on the FirstScreen widget.
-      initialRoute: '/login',
+      initialRoute: '/init',
       debugShowCheckedModeBanner: false,
 
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
+        '/init': (context) => const FirstScreen(),
         '/login': (context) => const LoginScreen(from: "main"),
         '/signup': (context) => const SignupScreen(from: "main"),
         '/home': (context) => const HomeScreen(from: "main"),
@@ -56,15 +57,12 @@ Future<void> main() async {
         '/settings': (context) => const SettingsScreen(from: "main"),
 
 
-
-
-
-
-
-
       },
 
     ),
   );
 }
+
+
+
 

@@ -1,12 +1,17 @@
 import 'package:eden_garden/controllers/dataBase_controller.dart';
 import 'package:eden_garden/controllers/route_management.dart';
 import 'package:eden_garden/controllers/slide_animation_controller.dart';
+
 import 'package:eden_garden/model/user_db.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eden_garden/view/login_screen.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:uuid/uuid.dart';
+
+
 
 class SignupScreen extends StatefulWidget {
   final String from;
@@ -26,6 +31,7 @@ class _SignupScreenState extends State<SignupScreen> {
   late String dialogReturnPseudo = "";
   late String dialogReturnEmail = "";
   late bool errorReturn = false;
+  var uuid = const Uuid();
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +41,11 @@ class _SignupScreenState extends State<SignupScreen> {
         backgroundColor: Colors.black,
         appBar: AppBar(
           backgroundColor: Colors.black,
-          title: const Center(child :Text(
+          centerTitle: true,
+          title: const Text(
             "Sign up",
             style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
-          )),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -47,9 +54,12 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(
                 height: 15,
               ),
-              buildText(
-                  name: "Sign up with one of following options",
-                  choose: const TextStyle(fontSize: 16, color: Colors.grey)),
+              const Padding(
+                padding: EdgeInsets.only(top: 15, left: 10),
+                child: Center(child :Text(
+                  "Sign up with one of following options",
+                  style: TextStyle(fontSize: 18, color: Colors.grey)),
+                )),
               buildGoogleAppleFunction(mq),
               buildText(name: "Pseudo", choose: const TextStyle(fontSize: 17, color: Colors.white)),
               buildNameField(),
@@ -198,7 +208,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget buildCreateAccount() {
     return Padding(
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
-      child: ElevatedButton(
+      child: Center(child : ElevatedButton(
         onPressed: () async {
 
           /// Check email validity
@@ -212,35 +222,39 @@ class _SignupScreenState extends State<SignupScreen> {
             dialogReturnEmail = "The email type must be like x@y.com";
           }
           if (pseudoValid){
-              errorReturn = true;
-              dialogReturnEmail = "The pseudo must not contains special characters";
+            errorReturn = true;
+            dialogReturnEmail = "The pseudo must not contains special characters";
           }
 
 
           if (emailValid && !pseudoValid){
-            UserDB newUser = UserDB(
-              id: "zfzgtrhiuyjdbdgrzrgzg",
-              fullName: "",
-              pseudo: _pseudoFieldController.text,
-              email: _emailFieldController.text,
-              password: _passwordFieldController.text,
-            );
+            if (await dataBaseCheckUserId(_emailFieldController.text)){
+              errorReturn = true;
+              dialogReturnEmail = "Email already exist";
+            }else{
+              UserDB newUser = UserDB(
+                id: uuid.v4(),
+                fullName: "",
+                pseudo: _pseudoFieldController.text,
+                email: _emailFieldController.text,
+                password: _passwordFieldController.text,
+                myGarden: [],
+              );
 
-            await Future.delayed(const Duration(milliseconds: 500), () {});
+              await Future.delayed(const Duration(milliseconds: 500), () {});
 
-            dataBaseWriteToId(newUser.email, {'id':newUser.id});
+              dataBaseWriteToId(newUser.email, {'id':newUser.id});
 
-            await Future.delayed(const Duration(milliseconds: 500), () {});
+              await Future.delayed(const Duration(milliseconds: 500), () {});
 
-            dataBaseWriteToUser(newUser.id, newUser.returnJson());
+              dataBaseWriteToUser(newUser.id, newUser.returnJson());
 
-            dialogReturnEmail = "Account creation successful!";
+              dialogReturnEmail = "Account creation successful!";
+            }
 
           }
 
-          setState(() {
-
-          });
+          setState(() {});
         },
 
         style: ElevatedButton.styleFrom(
@@ -250,7 +264,7 @@ class _SignupScreenState extends State<SignupScreen> {
             backgroundColor: Colors.purpleAccent[400],
             minimumSize: const Size(500, 48)),
         child: const Text("Create Account"),
-      ),
+      )),
     );
   }
 
@@ -260,20 +274,20 @@ class _SignupScreenState extends State<SignupScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children:  [
-            SlideAnimationController(
-              delay: 1500,
-              child: Center(child:Text(
-                dialogReturnPseudo,
-                style: const TextStyle(fontSize: 16, color: Colors.red),
-              )),
-            ),
-            SlideAnimationController(
-              delay: 1500,
-              child: Center(child:Text(
-                dialogReturnEmail,
-                style: const TextStyle(fontSize: 16, color: Colors.red),
-              )),
-            ),
+          SlideAnimationController(
+            delay: 1500,
+            child: Center(child:Text(
+              dialogReturnPseudo,
+              style: TextStyle(fontSize: 16, color: errorReturn ? Colors.red : Colors.green),
+            )),
+          ),
+          SlideAnimationController(
+            delay: 1500,
+            child: Center(child:Text(
+              dialogReturnEmail,
+              style: TextStyle(fontSize: 16, color: errorReturn ? Colors.red : Colors.green),
+            )),
+          ),
 
 
         ],

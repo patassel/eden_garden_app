@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 class GardenArticle {
 
    late final String title;
-   late final String description;
-   late final NetworkImage image;
+   late final Map<String, dynamic> information;
 
-   GardenArticle({this.title = "", this.description = "", this.image = const NetworkImage("https://images.pexels.com/photos/4671829/pexels-photo-4671829.jpeg")});
+   GardenArticle({this.title = "", required this.information});
 
 
    void setTitle(String newTitle){
@@ -15,10 +14,10 @@ class GardenArticle {
    }
 
    void setDescription(String newDescription){
-     description = newDescription;
+     information['description'] = newDescription;
    }
 
-   void setImage(NetworkImage newImage){
-     image = newImage;
+   void setImage(AssetImage newImage){
+     information['image'] = newImage;
    }
 }

@@ -68,7 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           gradient: LinearGradient(
             // DEEP BLUE DARK
             colors: themeSwitchVal ? global.ColorTheme().colorsViewBackgroundDark
-                : global.ColorTheme().colorsViewBackgroundLight,
+                : global.ColorTheme().colorsViewModernBackgroundLight,
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           ),
@@ -92,7 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                       style: TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w600,
-                          color: themeSwitchVal ? Colors.white : Colors.green),
+                          color: themeSwitchVal ? Colors.white : Colors.black),
                     ),
                   ],
                 ),
@@ -107,7 +107,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: Text("Language", style: TextStyle(color: global.themeAppDark ? global.ColorTheme().colorFromDark
                           : global.ColorTheme().colorFromLight),),
                       subtitle: Text("English", style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
-                          : Colors.blueGrey)),
+                          : Colors.green)),
                       onTap: () {print("language button");},
                     )),
 
@@ -123,7 +123,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: Text("Environment", style: TextStyle(color: global.themeAppDark ? global.ColorTheme().colorFromDark
                           : global.ColorTheme().colorFromLight),),
                       subtitle: Text("Production", style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
-                          : Colors.blueGrey)),
+                          : Colors.green)),
                     onTap: () {print("language button");},
 
 
@@ -142,7 +142,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: Text("Theme", style: TextStyle(color: global.themeAppDark ? global.ColorTheme().colorFromDark
                           : global.ColorTheme().colorFromLight),),
                       subtitle:  themeSwitchVal ?  Text("Dark", style: TextStyle( color : global.ColorTheme().colorFromDarkSub
-                      )) : const Text("Light", style: TextStyle( color : Colors.blueGrey)),
+                      )) : const Text("Light", style: TextStyle( color : Colors.green)),
                       trailing: Switch(
                           value: themeSwitchVal,
                           activeColor: Colors.redAccent,
@@ -211,7 +211,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     Text("Services", style: TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w600,
-                        color: themeSwitchVal ? Colors.white : Colors.green)),
+                        color: themeSwitchVal ? Colors.white : Colors.black)),
                   ],
                 ),
                 Material(

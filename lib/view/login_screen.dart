@@ -27,10 +27,14 @@ class _LoginScreenState extends State<LoginScreen> {
   late bool loadingPage = false;
   late bool documentExist = false;
   late String connexionReturn = "";
+  late bool orientationPortrait = false;
+
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.of(context).size;
+    orientationPortrait =  MediaQuery.of(context).orientation == Orientation.portrait;
+
     return loadingPage ? loadingAnimatePage() : SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -49,10 +53,13 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 15,
               ),
-              buildText(
-                  name: "Log in with one of following options",
-                  choose: const TextStyle(fontSize: 16, color: Colors.grey)),
-              buildGoogleAppleFunction(mq),
+              const Padding(
+                  padding: EdgeInsets.only(top: 15, left: 10),
+                  child: Center(child :Text(
+                      "Log in with one of following options",
+                      style: TextStyle(fontSize: 18, color: Colors.grey)),
+                  )),
+              buildGoogleAppleFunction(screenSize),
               buildText(name: "Email", choose: const TextStyle(fontSize: 17, color: Colors.white)),
               buildEmailField(),
               buildText(name: "Password", choose: const TextStyle(fontSize: 17, color: Colors.white)),
@@ -144,7 +151,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget buildTapToLogin() {
     return Padding(
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
-      child: ElevatedButton(
+      child: Center (
+      child : ElevatedButton(
         onPressed: () async {
 
           var emailValue = _emailFieldController.value.text;
@@ -152,22 +160,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
           /// Check Email exist
 
-            //dataBaseCheck(emailValue);
-
-          final snapShot = await FirebaseFirestore.instance
-              .collection('id')
-              .doc(emailValue) // varuId in your case
-              .get();
-
-          if (snapShot == null || !snapShot.exists) {
-            // Document with id == varuId doesn't exist.
-            //print("EXIST NOT");
-            documentExist=false;
-            // You can add data to Firebase Firestore here
-          }else{
-            //print("EXIST ${snapShot.data()!['id']}");
-            documentExist=true;
-            dataBaseRead(snapShot.data()!['id']);
+          if(emailValue.isNotEmpty) {
+            if (await dataBaseCheckUserId(_emailFieldController.text)){
+              final snapShot = await FirebaseFirestore.instance
+                  .collection('id')
+                  .doc(emailValue)
+                  .get();
+              documentExist=true;
+              dataBaseRead(snapShot.data()!['id']);
+            }else{
+              documentExist=false;
+            }
           }
 
           await Future.delayed(const Duration(milliseconds: 500), () {});
@@ -184,17 +187,12 @@ class _LoginScreenState extends State<LoginScreen> {
             connexionReturn = "Email invalid";
             connexionError = true;
           }
-            setState(() {
-
-            });
+            setState(() {});
 
             if (connexionReturn=="Connexion successful") {
-
               setState(() {loadingPage = true;});
 
               await Future.delayed(const Duration(milliseconds: 8000), () {});
-
-
               Navigator.push( // push -> Add route on stack
                 context,
                 FadeInRoute( // FadeInRoute  // ZoomInRoute  // RotationInRoute
@@ -202,23 +200,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   routeName: '/home',
                 ),
               );
+
               await Future.delayed(const Duration(milliseconds: 800), () {});
 
               setState(() {loadingPage = false;});
 
               connexionError = false;
-
-
             }
         },
 
         style: ElevatedButton.styleFrom(
             shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            backgroundColor: Colors.purpleAccent[400],
+            backgroundColor: Colors.green,
             minimumSize: const Size(500, 48)),
         child: const Text("Log in"),
-      ),
+      )),
     );
   }
 
@@ -234,20 +231,23 @@ class _LoginScreenState extends State<LoginScreen> {
         onTap: (){
           connexionReturn="";
           connexionError=false;
-
           setState(() {
 
           });
         },
 
         decoration: InputDecoration(
+            focusedBorder:OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.pinkAccent, width: 2.0),
+              borderRadius: BorderRadius.circular(25.0),
+            ),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.pinkAccent),
+                borderSide: const BorderSide(color: Colors.green),
                 borderRadius: BorderRadius.circular(20)),
             hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
             hintText: "Enter your password",
             border: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.pinkAccent),
+                borderSide: const BorderSide(color: Colors.green),
                 borderRadius: BorderRadius.circular(20))),
       ),
     );
@@ -271,13 +271,17 @@ class _LoginScreenState extends State<LoginScreen> {
         style: const TextStyle(fontSize: 17, color: Colors.white),
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
+            focusedBorder:OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.pinkAccent, width: 2.0),
+              borderRadius: BorderRadius.circular(25.0),
+            ),
             enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.pinkAccent),
+                borderSide: const BorderSide(color: Colors.green),
                 borderRadius: BorderRadius.circular(20)),
             hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
             hintText: "hello@login.com",
             border: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.pinkAccent),
+                borderSide: const BorderSide(color: Colors.green),
                 borderRadius: BorderRadius.circular(20))),
       ),
     );
@@ -358,29 +362,32 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget loadingAnimatePage() {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Column(
+      body:
+
+      Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children :
             [
-              SpinKitPouringHourGlass(
+              const SpinKitPouringHourGlass(
                 size: 300,
-                color: global.ColorTheme().colorFromDarkSub,
-                duration: const Duration(milliseconds: 3000),
+                color: Colors.green,
+                duration: Duration(milliseconds: 3000),
+
               ),
 
-              const SizedBox(height: 100,),
+              SizedBox(height: orientationPortrait ? 100 : 30,),
 
 
               SlideAnimationController(
                   delay: 1200,
-                  child: Text("Hi ${global.currentUser.pseudo}", style: TextStyle(color: global.ColorTheme().colorFromDarkSub, fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'meri'),),
+                  child: Text("Hi ${global.currentUser.pseudo}", style: const TextStyle(color: Colors.green, fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'meri'),),
               ),
 
               const SizedBox(height: 20,),
 
-              SlideAnimationController(
+              const SlideAnimationController(
                 delay: 1800,
-                child: Text("Welcome to the Eden Garden", style: TextStyle(color: global.ColorTheme().colorFromDarkSub, fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'meri'),),
+                child: Text("Welcome to the Eden Garden", style: TextStyle(color: Colors.green, fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'meri'),),
               )
             ]
       ),

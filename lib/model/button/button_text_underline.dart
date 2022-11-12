@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 class ButtonTextDivider extends StatelessWidget {
 
   final String title;
+  final double titleSize;
+
   final double widthDivider;
+  final int speedDivider;
 
   final Color colorHover;
   final Color colorText;
@@ -16,7 +19,7 @@ class ButtonTextDivider extends StatelessWidget {
   final Function(bool)? onHoverMouse;
 
 
-  const ButtonTextDivider({Key? key, required this.title, this.widthDivider = 50,
+  const ButtonTextDivider({Key? key, required this.title, this.titleSize=12, this.widthDivider = 50, this.speedDivider = 500,
     this.colorHover = const Color(0xFFFF7043), this.colorText = Colors.black, this.colorDivider = Colors.black,
     required this.onclickButton, required this.onHoverMouse})
       : super(key: key);
@@ -49,12 +52,12 @@ class ButtonTextDivider extends StatelessWidget {
                         color: colorText,
                         fontWeight: FontWeight.w800,
                         fontFamily: 'RobotMono',
-                        fontSize: 12,)
+                        fontSize: titleSize,)
                   ),
                 ),
                 AnimatedSize(
                     curve: Curves.decelerate,
-                    duration: const Duration(milliseconds: 300),
+                    duration: Duration(milliseconds: speedDivider),
                     child: SizedBox(
                         width: widthDivider,
                         child:

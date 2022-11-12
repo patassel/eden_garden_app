@@ -1,5 +1,9 @@
 
+import 'dart:io';
+
 import 'package:eden_garden/controllers/route_management.dart';
+import 'package:eden_garden/controllers/slide_animation_controller.dart';
+import 'package:eden_garden/model/button/button_rect.dart';
 import 'package:eden_garden/model/drawer/drawer_style.dart';
 import 'package:eden_garden/model/body/profile_body_view.dart';
 import 'package:eden_garden/model/bottomNavigation/simpleBottomBar.dart';
@@ -7,6 +11,9 @@ import 'package:eden_garden/model/button/button_circle.dart';
 import 'package:eden_garden/view/garden_screen.dart';
 import 'package:eden_garden/view/search_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //import 'package:eden_garden/controllers/dataBase_controller.dart';
 //import 'package:eden_garden/controllers/route_management.dart';
@@ -29,61 +36,80 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   late String from;
-  late TextTheme textTheme;
 
   late double screenWidth ;
   late double screenHeight ;
   late bool orientationPortrait = false;
 
+  late bool flagProfileEdit = false;
+  late bool flagProfileZoom = false;
+  late bool flagErrorDataException = false;
+  late bool flagStatusConnexion = false;
 
-  late bool profileEdit = false;
-  late bool profileZoom = false;
-  late bool errorDataException = false;
+  late File? androidImageFile;
+  late String? imagePath= "";
+  //late XFile? iosImageFile;
 
-
-  int count = 0;
+  // Data user shared preferences.
+  late SharedPreferences dataUser;
 
   late GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  late ScrollController controllerView = ScrollController();
+
 
   @override
   void initState() {
     super.initState();
     from = widget.from;
+    androidImageFile = File('');
+    //iosImageFile = XFile('');
 
-    /// Initiate User Object
-    //getUserDB("pfTjVgNet8ggVpNOAfas");
+    /// Initiate User Data SharedPreference
+    SharedPreferences.getInstance().then((SharedPreferences sp) {
+      dataUser = sp;
+      imagePath = dataUser.getString('profile');
+      // will be null if never previously saved
+      if (imagePath!=null){
+        androidImageFile = File(imagePath!);
+      }
+      setState(() {});
+    });
   }
 
+  initiateSetState() async {
+    await Future.delayed(const Duration(milliseconds: 200), () {});
 
-  initiateSetState() {setState(() {});}
-
-   /*getUserDB(String id) {
-
-    try {
-          dataBaseRead(id);
-    } on Exception catch (e) {
-      errorDataException = true;
+    setState(() {});
+    if(flagProfileZoom){
+      await Future.delayed(const Duration(milliseconds: 1000), () {});
+      controllerView.jumpTo(controllerView.position.minScrollExtent);
     }
-
   }
 
-    */
-
+  @override
+  void dispose() {
+    //WidgetsBinding.instance.removeObserver(this);
+    controllerView.dispose();
+    super.dispose();
+    //initiateSetState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    textTheme = Theme.of(context).textTheme;
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
     orientationPortrait =  MediaQuery.of(context).orientation == Orientation.portrait;
 
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async{ return _onWillPop();},
+    child:Scaffold(
 
       key: scaffoldKey,
 
       drawer:  AppDrawer(from: "home", function: initiateSetState,),
 
-      bottomNavigationBar: SimpleBottomBar(
+      bottomNavigationBar: orientationPortrait?  SimpleBottomBar(
         from: "home",
         onPressed: (val){
           global.currentPage = val;
@@ -119,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           initiateSetState();
         },
-      ),
+      ) : const SizedBox(),
 
 
       body:
@@ -129,8 +155,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
       GestureDetector(
       onTap: () {
-        profileEdit = false;
-        profileZoom = false;
+        if (!flagStatusConnexion) {
+          flagProfileEdit = false;
+          flagProfileZoom = false;
+          flagStatusConnexion = false;
+        }
         initiateSetState();
     },
       child:
@@ -142,107 +171,416 @@ class _HomeScreenState extends State<HomeScreen> {
                 gradient: LinearGradient(
                   // DEEP BLUE DARK
                   colors: global.themeAppDark ? global.ColorTheme().colorsViewBackgroundDark
-                      : global.ColorTheme().colorsViewBackgroundLight,
+                      : global.ColorTheme().colorsViewModernBackgroundLight,
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
                 )
               ),
 
+        child:
+            SingleChildScrollView(
+                controller: controllerView,
 
+                child:
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
 
-        child: SingleChildScrollView(
-          child:
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              SizedBox(
-                height: profileZoom ? 400: 200,
-                width: screenWidth,
+                    /// TOP VIEW  --------------------------------------------------
 
-                /// TOP VIEW  --------------------------------------------------
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    /// DRAWER BUTTON DESIGN if not mobile
-
-                    if (global.currentPlatform!="and" && global.currentPlatform!="ios")
-                      Positioned(
-                        left: 10,
-                        top: 20,
-                        child: IconButton(
-                          icon:  const Icon(Icons.menu,color: Colors.black,),
-                          onPressed: () => scaffoldKey.currentState?.openDrawer(),
-                        ),
-
-                      ),
-
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child:  GestureDetector(
-
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-
-                          if (profileEdit){profileEdit = false;}
-                          else{profileZoom = !profileZoom;}
-
-                          initiateSetState();
-                        },
-
-                        onLongPress: () {
-                          if (profileZoom){profileZoom = false;}
-                          else{
-                            profileEdit = !profileEdit;
-
-                          }
-                          initiateSetState();
-                        },
-                        child:
-                        AnimatedSize(
-                          duration: const Duration(milliseconds: 1000),
-                          curve: Curves.fastLinearToSlowEaseIn,
-                          child:
-                            Hero(
-                              tag: 'user',
-                              child: ClipOval(
-                                    child : Image.network(
-                                      'https://firebasestorage.googleapis.com/v0/b/eden-garden-bcf0f.appspot.com/o/Users%2Fphoto%20cv.PNG?alt=media&token=33288792-8970-4496-8541-fd0f46b8d9c6',
-                                      width: profileZoom ? screenWidth*0.8: 150,
-                                      height: profileZoom ? screenHeight*0.4:  150,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                              )),
-                      )
+                    /// Top view Banner
+                    Container(
+                      padding: const EdgeInsets.only(top: 10,),
+                      height: 105,
+                      color: Colors.green,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 30,),
+                          child :Text("My account",
+                            style: TextStyle(
+                              color: Colors.greenAccent.shade100,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'meri',
+                              fontSize: 34,)),
+                      )),
                     ),
 
-                    profileEdit?
-                    Align(
-                          alignment: const Alignment(0.8, 0),
+                    const SizedBox(height: 50,),
+
+                    /// GESTION PROFILE CONNECTIVITY ---------------------------
+                    Stack(
+                      children: [
+                    /// Profile picture
+                        Align(alignment: Alignment.center,child:
+                        GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+
+                      /// ZOOM profile
+                      onTap: () async {
+
+                        if (flagProfileEdit){flagProfileEdit = false; flagStatusConnexion = false;}
+                        else{
+                          flagProfileZoom = !flagProfileZoom;
+
+                        }
+                        initiateSetState();
+                      },
+                      onLongPress: () {
+                        if (flagProfileZoom){flagProfileZoom = false;}
+                        else{
+                          flagProfileEdit = !flagProfileEdit;
+                        }
+                        initiateSetState();
+                      },
+                      child:
+                      AnimatedSize(
+                          duration: const Duration(milliseconds: 1000),
+                          curve: Curves.decelerate,
                           child:
+                          Hero(
+                              tag: 'user',
+                              child:
+                                  Container(
+                                    width: (orientationPortrait && flagProfileZoom) ? screenWidth*0.8 : (!orientationPortrait && flagProfileZoom) ? screenWidth*0.4 : 150,
+                                    height: (orientationPortrait && flagProfileZoom) ? screenHeight*0.4 : (!orientationPortrait && flagProfileZoom) ? screenHeight*0.8:  150,
+                                    decoration: BoxDecoration(
+                                      image: androidImageFile!.path.isEmpty ?
+                                      DecorationImage(
+                                          image:  const AssetImage('assets/profile.jpg') ,
+                                          fit: flagProfileZoom ? BoxFit.fill : BoxFit.cover,
+                                      ) :
+                                      DecorationImage(
+                                        image: FileImage(androidImageFile!),
+                                        fit: flagProfileZoom ? BoxFit.fill : BoxFit.cover,
+                                      ),
+                                        border: Border.all(color
+                                            :flagProfileZoom ? Colors.transparent
+                                            :global.currentUser.online==0 ? Colors.grey
+                                            :global.currentUser.online==1? Colors.green
+                                            :global.currentUser.online==2 ? Colors.red.shade400
+                                            : Colors.white,
+                                            width: 5),
+                                      borderRadius: const BorderRadius.all(Radius.circular(120.0)),
+
+                                    ),
+
+                              )
+                          )),
+                    ),),
+
+                        /// EDIT profile
+                        flagProfileEdit? Align(alignment: const Alignment(0.8,0.8),
+                            child:
+
                             ButtonCircle(
-                              onPressed: (){
-                              },
-                            )
-                        ) : const SizedBox(),
+                                onPressed: () async {
+                                  await androidGetFromGallery();
+                                  initiateSetState();
+                                  await dataUser.setString('profile', androidImageFile!.path);
+                                },
+                              ),
+                            ): const SizedBox(),
 
-                    ///---------------------------------------------------------
-                  ],),
-              ),
+                        flagProfileEdit? Align(alignment: const Alignment(-0.8,0.8),
+                            child:
+                                Container(
+                                  width: 100,
+                                  child :
+                                  Column(
+                                  children: [
+                                    ButtonCircle(
+                                      icon: const Icon(Icons.arrow_drop_down_circle_sharp),
+                                      onPressed: () {
+                                        flagStatusConnexion = !flagStatusConnexion;
+                                        initiateSetState();
+                                      },
+                                    ),
+
+                                    flagStatusConnexion?
+                                    SlideAnimationController(
+                                        delay: 500,
+                                        child:
+                                        Column(
+                                              children: [
+                                                GestureDetector(
+                                                    onTap: (){global.currentUser.online=0; initiateSetState();},
+                                                    child :
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Container(
+                                                            height: 15,
+                                                            width: 15,
+                                                            margin: const EdgeInsets.all(10),
+                                                            decoration: BoxDecoration(
+                                                                color: Colors.grey,
+                                                                shape: BoxShape.circle,
+                                                                border: Border.all(
+                                                                  color: Colors.grey,
+                                                                  width: 3,
+                                                                ))
+                                                        ),
+
+                                                        Text('Offline',
+                                                          style: TextStyle(
+                                                            letterSpacing: 0.25,
+                                                            color: global.themeAppDark ? global.ColorTheme().colorFromDark : global.ColorTheme().colorFromLight,
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'RobotMono',
+                                                            fontSize: 16,),),
+
+                                                      ],
+                                                    )),
+                                                GestureDetector(
+                                                    onTap: (){global.currentUser.online=1; initiateSetState();},
+                                                    child :
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Container(
+                                                            height: 15,
+                                                            width: 15,
+                                                            margin: const EdgeInsets.all(10),
+                                                            decoration: BoxDecoration(
+                                                                color: Colors.green,
+                                                                shape: BoxShape.circle,
+                                                                border: Border.all(
+                                                                  color: Colors.green,
+                                                                  width: 3,
+                                                                ))
+                                                        ),
+
+                                                        Text('Online',
+                                                          style: TextStyle(
+                                                            letterSpacing: 0.25,
+                                                            color: global.themeAppDark ? global.ColorTheme().colorFromDark : global.ColorTheme().colorFromLight,
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'RobotMono',
+                                                            fontSize: 16,),),
+
+                                                      ],
+                                                    )),
+                                                GestureDetector(
+                                                    onTap: (){global.currentUser.online=2; initiateSetState();},
+                                                    child :
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Container(
+                                                            height: 15,
+                                                            width: 15,
+                                                            margin: const EdgeInsets.all(10),
+                                                            decoration: BoxDecoration(
+                                                                color: Colors.red.shade400,
+                                                                shape: BoxShape.circle,
+                                                                border: Border.all(
+                                                                  color: Colors.red.shade400,
+                                                                  width: 3,
+                                                                ))
+                                                        ),
+
+                                                        Text('Busy',
+                                                          style: TextStyle(
+                                                            letterSpacing: 0.25,
+                                                            color: global.themeAppDark ? global.ColorTheme().colorFromDark : global.ColorTheme().colorFromLight,
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'RobotMono',
+                                                            fontSize: 16,),),
+
+                                                      ],
+                                                    ))
+                                              ],
+
+                                        )) : const SizedBox(),
+                                  ],
+                                ))
+                        )
+
+                         : const SizedBox(),
+
+
+
+
+                      ],
+                    ),
+                    /// --------------------------------------------------------
+
+
+
+                    !flagProfileZoom ?
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20, top: 10),
+                    child:
+
+                    SlideAnimationController(
+                      delay: 800,
+                      child: Text(
+                        global.currentUser.fullName,
+                        style: TextStyle(
+                          letterSpacing: 0.25,
+                          color: global.themeAppDark ? global.ColorTheme().colorFromDark : global.ColorTheme().colorFromLight,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'RobotMono',
+                          fontSize: 24,),
+                      ),
+                    ))
+                     : const SizedBox(),
+
 
               ///---------------------------------------------------------------
+                    Container(
+                      height: 10,
+                      color: Colors.black12,
 
+                    ),
+              /// BANNER INFO GENERAL ------------------------------------------
+              Container(
+                margin: const EdgeInsets.only(top: 10),
+                padding: EdgeInsets.only(bottom: orientationPortrait ? 0 : 50),
+                height: 100,
+                width: screenWidth,
+
+                child:
+                SlideAnimationController(
+                  delay: 800,
+                  child:
+                  Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Garden Item ',
+                          style:TextStyle(
+                            letterSpacing: 0.25,
+                            color: global.themeAppDark ? global.ColorTheme().colorFromDark : global.ColorTheme().colorFromLight,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'RobotMono',
+                            fontSize: 16,),
+                        ),
+                        Text(global.currentUser.myGardenObject.length.toString(),
+                          style:TextStyle(
+                            letterSpacing: 0.25,
+                            color: global.ColorTheme().colorDeepDark,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'RobotMono',
+                            fontSize: 16,),
+                        ),
+                      ],
+                    ),
+
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Community ',
+                          style:TextStyle(
+                            letterSpacing: 0.25,
+                            color: global.themeAppDark ? global.ColorTheme().colorFromDark : global.ColorTheme().colorFromLight,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'RobotMono',
+
+                            fontSize: 16,),
+                        ),
+                        Text('0',
+                          style:TextStyle(
+                            letterSpacing: 0.25,
+                            color: global.ColorTheme().colorDeepDark,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'RobotMono',
+                            fontSize: 16,),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+                ),
+
+              ///---------------------------------------------------------------
+                    Container(
+                    height: 10,
+                    color: Colors.black12,
+
+                ),
               /// BODY VIEW  ---------------------------------------------------
-              ProfileBodyView(profileZoom: profileZoom, screenWidth: screenWidth),
+                    ProfileBodyView(profileZoom: flagProfileZoom, screenWidth: screenWidth),
               ///---------------------------------------------------------------
 
 
+              //const SizedBox(height: 30,),
 
             ],
-          ),
-        ),
+          )),
       ))
-    );
+    ));
   }
+
+  /// Get from Gallery
+  Future androidGetFromGallery() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        androidImageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Are you sure ?\n'),
+        content: const Text('Do you want to sign out and exit Eden garden ?'),
+        actions: <Widget>[
+          ButtonRect(
+              title: "No",
+              colorBorder: Colors.transparent,
+              colorBackground: Colors.transparent,
+              colorHover: Colors.black,
+              colorText: global.ColorTheme().colorDeepDark,
+              onclickButton: () {
+                setState(() =>Navigator.pop(context));
+
+              },
+              onHoverMouse: (val) {}
+            /* setState(()
+              {
+                if (val) {
+                  colorTextCancel = Colors.white;
+                }else{
+                  colorTextCancel = global.ColorTheme().colorFromLight;
+                }
+              });
+            },
+              */
+          ),
+          SizedBox(width: orientationPortrait ?  screenWidth*0.28: screenWidth*0.38,),
+          /*TextButton(
+            //onPressed: () => Navigator.of(context).pop(true),
+            onPressed: () => SystemNavigator.pop(),
+            child: const Text('Yes'),
+          ),
+
+           */
+          ButtonRect(
+              title: "Yes",
+              colorBorder: Colors.transparent,
+              colorBackground: Colors.transparent,
+              colorHover: Colors.black,
+              colorText: global.ColorTheme().colorDeepDark,
+              onclickButton: () => SystemNavigator.pop(),
+              onHoverMouse: (val) {}
+
+          ),
+        ],
+      ),
+    ));
+  }
+
+
 }

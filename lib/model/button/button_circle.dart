@@ -6,32 +6,48 @@ import 'package:flutter/material.dart';
 
 class ButtonCircle extends StatelessWidget {
 
+  final Icon icon;
   final Function()? onPressed;
 
-  const ButtonCircle({Key? key, this.onPressed})
-      : super(key: key);
+  final double height;
+  final double width;
+
+  final Color colorBorder;
+  final Color colorBackground;
+
+
+  const ButtonCircle({
+    Key? key,
+    this.height = 50,
+    this.width = 60,
+    this.onPressed, this.icon = const Icon(Icons.edit),
+    this.colorBorder = const Color(0x73000000), this.colorBackground = Colors.white
+  }) : super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
     return SlideAnimationController(
-        delay: 500,
-        child: Container(
-          height: 50,
-          width: 100,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: const Color(0x73000000),
-                width: 3,
-              )),
-          child: Center(
-            child: IconButton(
-              onPressed: onPressed,
-              icon: const Icon(Icons.edit),
-            ),
-          ),
+            delay: 900,
+            child: Container(
+                  height: height,
+                  width: width,
+                  decoration: BoxDecoration(
+                  color: colorBackground,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: colorBorder,
+                    width: 3,
+                  )),
+                  child: Center(
+                      child:
+                      IconButton(
+                        onPressed: onPressed,
+                        icon: icon,
+
+                      ),
+
+                    ),
         )
     );
   }

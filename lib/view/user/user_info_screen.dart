@@ -57,157 +57,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   initiateSetState() {setState(() {});}
 
 
-  Future<void> _displayTextInputDialog(BuildContext context, String title, String oldValue) async {
-    return showDialog(
-        context: context,
-        builder:
-            (context) => StatefulBuilder(builder : (context, setState)  => AlertDialog(
-                title: Center(child :
-                Text(
-                    title=="name" ? "Enter a new full name" :
-                    title=="pw" ? "Enter a new password" :
-                    title=="ps" ? "Enter a new pseudo" :
-                    title=="e" ? "Enter a new email" :
-                    title=="ph" ? "Enter a new phone number" : "Error!",
-                    style: TextStyle(
-                      color: global.ColorTheme().colorFromLight,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'meri',
-                      fontSize: 22),
 
-                )),
-                content: SizedBox(
-                    height: screenHeight*0.1,
-                    width: screenWidth*0.8,
-                    child :Center(
-                        child:TextField(
-                          onSubmitted: (val){
-                            textFocusNode.unfocus();
-                            setState(() {});
-                          },
-
-                          onChanged: (value) {
-                              valueField = value;
-                              setState(() {});
-                          },
-
-                          onTap: () {
-                            setState(()
-                            {
-                              if (textFocusNode.hasFocus){
-                                textFocusNode.unfocus();
-                                focus=false;
-                              }else{
-                              textFocusNode.requestFocus();
-                              focus=true;
-                              }
-                            });
-                          },
-
-                          controller: _textFieldController,
-                          decoration: InputDecoration(hintText: oldValue),
-
-
-                        )),
-                ),
-                actions: <Widget>[
-
-                  (!orientationPortrait && !textFocusNode.hasFocus) || (orientationPortrait && !textFocusNode.hasFocus) ? ButtonRect(
-                    title: "CANCEL",
-                    colorBorder: Colors.transparent,
-                    colorBackground: Colors.transparent,
-                    colorHover: Colors.black,
-                    colorText: global.ColorTheme().colorDeepDark,
-                    onclickButton: () {
-                      setState(() =>Navigator.pop(context));
-
-                    },
-                    onHoverMouse: (val) {
-
-                      setState(()
-                      {
-                      if (val) {
-                        colorTextCancel = Colors.white;
-                      }else{
-                        colorTextCancel = global.ColorTheme().colorFromLight;
-                      }
-                      });
-                    },
-                  ) : const SizedBox(),
-                  SizedBox(width: orientationPortrait ?  screenWidth*0.28: screenWidth*0.65,),
-                  (!orientationPortrait && !textFocusNode.hasFocus) || (orientationPortrait && !textFocusNode.hasFocus) ? ButtonRect(
-                    title: "SAVE",
-                    colorBorder: Colors.transparent,
-                    colorBackground: Colors.transparent,
-                    colorHover: Colors.black,
-                    colorText: global.ColorTheme().colorFromDarkSub,
-
-                    onclickButton: () {
-
-                      switch (title) {
-                        case "name":
-                          //dataBaseUpdate(widget.user.id, "fullName", _textFieldController.value.text);
-                          widget.user.setName(_textFieldController.value.text);
-                          break;
-                        case "ps":
-
-                          try {
-                            dataBaseUpdate(widget.user.id, "pseudo", _textFieldController.value.text);
-                          } on Exception catch (e) {
-                            print(e);
-                          }
-                          widget.user.setPseudo(_textFieldController.value.text);
-
-                          break;
-                        case "ph":
-                          try {
-                            dataBaseUpdate(widget.user.id, "phone", _textFieldController.value.text);
-                          } on Exception catch (e) {
-                            print(e);
-                          }
-                          widget.user.setPhone(_textFieldController.value.text);
-                          break;
-                        case "e":
-                          try {
-                            dataBaseUpdate(widget.user.id, "email", _textFieldController.value.text);
-                          } on Exception catch (e) {
-                            print(e);
-                          }
-                          dataBaseUpdate(widget.user.id, "email", _textFieldController.value.text);
-                          widget.user.setEmail(_textFieldController.value.text);
-                          break;
-                        case "pw":
-                          try {
-                            dataBaseUpdate(widget.user.id, "password", _textFieldController.value.text);
-                          } on Exception catch (e) {
-                            print(e);
-                          }
-                          widget.user.setPassword(_textFieldController.value.text);
-                        break;
-                      }
-
-                      initiateSetState();
-                      Navigator.pop(context);
-
-                    },
-
-                    onHoverMouse: (val) {
-                      if (val) {
-                        colorTextSave = Colors.white;
-                      }else{
-                        colorTextSave = global.ColorTheme().colorFromLight;
-                      }
-                      setState(() {});
-                    },
-
-
-                  ) : SizedBox(),
-
-
-                ],
-              )
-        ));
-  }
 
 
   @override
@@ -221,6 +71,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
         key: scaffoldKey,
 
         appBar: AppBar(
+          centerTitle: true,
           title: Text(
             'Personal information', style: TextStyle(
               fontSize: 22, fontWeight: FontWeight.w800, color: themeSwitchVal? Colors.white : global.ColorTheme().colorFromLight),
@@ -249,7 +100,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
             gradient: LinearGradient(
               // DEEP BLUE DARK
               colors: themeSwitchVal ? global.ColorTheme().colorsViewBackgroundDark
-                  : global.ColorTheme().colorsViewBackgroundLight,
+                  : global.ColorTheme().colorsViewModernBackgroundLight,
               begin: Alignment.bottomLeft,
               end: Alignment.topRight,
             ),
@@ -429,6 +280,161 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           ),
         )
     );
+  }
+
+  Future<void> _displayTextInputDialog(BuildContext context, String title, String oldValue) async {
+    return showDialog(
+        context: context,
+        builder:
+            (context) => StatefulBuilder(builder : (context, setState)  => AlertDialog(
+          title: Center(child :
+          Text(
+            title=="name" ? "Enter a new full name" :
+            title=="pw" ? "Enter a new password" :
+            title=="ps" ? "Enter a new pseudo" :
+            title=="e" ? "Enter a new email" :
+            title=="ph" ? "Enter a new phone number" : "Error!",
+            style: TextStyle(
+                color: global.ColorTheme().colorFromLight,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'meri',
+                fontSize: 22),
+
+          )),
+          content: SizedBox(
+            height: screenHeight*0.1,
+            width: screenWidth*0.8,
+            child :Center(
+                child:TextField(
+                  onSubmitted: (val){
+                    textFocusNode.unfocus();
+                    setState(() {});
+                  },
+
+                  onChanged: (value) {
+                    valueField = value;
+                    setState(() {});
+                  },
+
+                  onTap: () {
+                    setState(()
+                    {
+                      if (textFocusNode.hasFocus){
+                        textFocusNode.unfocus();
+                        focus=false;
+                      }else{
+                        textFocusNode.requestFocus();
+                        focus=true;
+                      }
+                    });
+                  },
+
+                  controller: _textFieldController,
+                  decoration: InputDecoration(hintText: oldValue),
+
+
+                )),
+          ),
+          actions: <Widget>[
+
+            (!orientationPortrait && !textFocusNode.hasFocus) || (orientationPortrait && !textFocusNode.hasFocus) ? ButtonRect(
+              title: "CANCEL",
+              colorBorder: Colors.transparent,
+              colorBackground: Colors.transparent,
+              colorHover: Colors.black,
+              colorText: global.ColorTheme().colorDeepDark,
+              onclickButton: () {
+                setState(() =>Navigator.pop(context));
+
+              },
+              onHoverMouse: (val) {
+
+                setState(()
+                {
+                  if (val) {
+                    colorTextCancel = Colors.white;
+                  }else{
+                    colorTextCancel = global.ColorTheme().colorFromLight;
+                  }
+                });
+              },
+            ) : const SizedBox(),
+            SizedBox(width: orientationPortrait ?  screenWidth*0.28: screenWidth*0.65,),
+            (!orientationPortrait && !textFocusNode.hasFocus) || (orientationPortrait && !textFocusNode.hasFocus) ? ButtonRect(
+              title: "SAVE",
+              colorBorder: Colors.transparent,
+              colorBackground: Colors.transparent,
+              colorHover: Colors.black,
+              colorText: global.ColorTheme().colorFromDarkSub,
+
+              onclickButton: () {
+
+                switch (title) {
+                  case "name":
+                    try {
+                      dataBaseUpdate(widget.user.id, "fullName", _textFieldController.value.text);
+                    } on Exception catch (e) {
+                      print(e);
+                    }
+                    widget.user.setName(_textFieldController.value.text);
+                    break;
+                  case "ps":
+
+                    try {
+                      dataBaseUpdate(widget.user.id, "pseudo", _textFieldController.value.text);
+                    } on Exception catch (e) {
+                      print(e);
+                    }
+                    widget.user.setPseudo(_textFieldController.value.text);
+
+                    break;
+                  case "ph":
+                    try {
+                      dataBaseUpdate(widget.user.id, "phone", _textFieldController.value.text);
+                    } on Exception catch (e) {
+                      print(e);
+                    }
+                    widget.user.setPhone(_textFieldController.value.text);
+                    break;
+                  case "e":
+                    try {
+                      dataBaseUpdate(widget.user.id, "email", _textFieldController.value.text);
+                    } on Exception catch (e) {
+                      print(e);
+                    }
+                    widget.user.setEmail(_textFieldController.value.text);
+                    break;
+                  case "pw":
+                    try {
+                      dataBaseUpdate(widget.user.id, "password", _textFieldController.value.text);
+                    } on Exception catch (e) {
+                      print(e);
+                    }
+                    widget.user.setPassword(_textFieldController.value.text);
+                    break;
+                }
+
+                initiateSetState();
+                Navigator.pop(context);
+
+              },
+
+              onHoverMouse: (val) {
+                if (val) {
+                  colorTextSave = Colors.white;
+                }else{
+                  colorTextSave = global.ColorTheme().colorFromLight;
+                }
+                setState(() {});
+              },
+
+
+            ) : const SizedBox(),
+
+
+          ],
+        )
+        ));
   }
 
 }
