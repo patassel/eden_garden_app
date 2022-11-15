@@ -24,9 +24,9 @@ Login                      |  Overview                 |
 
 
 
-Change theme               |  Charts                   |         
+Change theme               |  Windows Overview         |         
 :-------------------------:|:-------------------------:|
-<video src="https://user-images.githubusercontent.com/35902416/201552287-f00846f8-c53e-4017-b9fc-72233382db71.mp4"  width="300" height="600">  | <video src="https://user-images.githubusercontent.com/35902416/201552456-49b54a0e-3101-4234-9398-0434b94465b3.mp4"  width="300" height="600">
+<video src="https://user-images.githubusercontent.com/35902416/201552287-f00846f8-c53e-4017-b9fc-72233382db71.mp4"  width="300" height="600">  | <video src="https://user-images.githubusercontent.com/35902416/202044470-e4b50294-5654-4e94-89d4-4d9e7dde19b9.mp4"  width="600" height="300">
 
 
 
@@ -39,10 +39,6 @@ Add Item                   |  Delete Item              |
 Edit profil                |  Item management          |         
 :-------------------------:|:-------------------------:|
 <video src="https://user-images.githubusercontent.com/35902416/201553191-1f397ffe-f2ad-4776-bdc5-fbda89ba2a7b.mp4"  width="300" height="600">  | <video src="https://user-images.githubusercontent.com/35902416/202038796-908a9415-bbba-45ce-b5e2-8307b2abd0f5.mp4"  width="300" height="600">
-
-
-
-
 
 
 
