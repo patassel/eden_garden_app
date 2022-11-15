@@ -36,13 +36,9 @@ Add Item                   |  Delete Item              |
 
 
 
-Edit profil                |          
-:-------------------------:|
-<video src="https://user-images.githubusercontent.com/35902416/201553191-1f397ffe-f2ad-4776-bdc5-fbda89ba2a7b.mp4"  width="300" height="600">  | 
-
-
-
-
+Edit profil                |  Item management          |         
+:-------------------------:|:-------------------------:|
+<video src="https://user-images.githubusercontent.com/35902416/201553191-1f397ffe-f2ad-4776-bdc5-fbda89ba2a7b.mp4"  width="300" height="600">  | <video src="https://user-images.githubusercontent.com/35902416/202037792-0cdcebad-9247-435c-b771-41a3e32fb8fc.mp4"  width="300" height="600">
 
 
 
