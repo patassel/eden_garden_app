@@ -102,84 +102,86 @@ class _HomeScreenState extends State<HomeScreen> {
     orientationPortrait =  MediaQuery.of(context).orientation == Orientation.portrait;
 
     return WillPopScope(
-        onWillPop: () async{ return _onWillPop();},
-    child:Scaffold(
+        onWillPop: () async{
+          return _onWillPop();
+          },
 
-      key: scaffoldKey,
+        child:Scaffold(
+            key: scaffoldKey,
 
-      drawer:  AppDrawer(from: "home", function: initiateSetState,),
+            drawer:  AppDrawer(from: "home", function: initiateSetState,),
 
-      bottomNavigationBar: orientationPortrait?  SimpleBottomBar(
-        from: "home",
-        onPressed: (val){
-          global.currentPage = val;
+            bottomNavigationBar: orientationPortrait?  SimpleBottomBar(
+              from: "home",
+              onPressed: (val){
+                global.currentPage = val;
 
-          switch (val) {
-            case 0:
-              Navigator.pushReplacement(  // push -> Add route on stack
-                context,
-                FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
-                  page: const HomeScreen(from: "home"), //ContactScreen(),
-                  routeName: '/home',
-                ),
-              );
-              break;
-            case 1:
-              Navigator.pushReplacement(  // push -> Add route on stack
-                context,
-                FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
-                  page: const SearchScreen(from: "home"), //ContactScreen(),
-                  routeName: '/search',
-                ),
-              );
-              break;
-            case 2:
-              Navigator.pushReplacement(  // push -> Add route on stack
-                context,
-                FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
-                  page: const GardenScreen(from: "home"), //ContactScreen(),
-                  routeName: '/myGarden',
-                ),
-              );
-              break;
-          }
-          initiateSetState();
-        },
-      ) : const SizedBox(),
+                switch (val) {
+                  case 0:
+                    Navigator.pushReplacement(  // push -> Add route on stack
+                      context,
+                      FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                        page: const HomeScreen(from: "home"), //ContactScreen(),
+                        routeName: '/home',
+                      ),
+                    );
+                    break;
+                  case 1:
+                    Navigator.pushReplacement(  // push -> Add route on stack
+                      context,
+                      FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                        page: const SearchScreen(from: "home"), //ContactScreen(),
+                        routeName: '/search',
+                      ),
+                    );
+                    break;
+                  case 2:
+                    Navigator.pushReplacement(  // push -> Add route on stack
+                      context,
+                      FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                        page: const GardenScreen(from: "home"), //ContactScreen(),
+                        routeName: '/myGarden',
+                      ),
+                    );
+                    break;
+                }
+                initiateSetState();
+              },
+            ) : const SizedBox(),
 
 
-      body:
-      /// BODY -----------------------------------------------------------------
+            body:
+            /// BODY -----------------------------------------------------------------
 
-      /// BACKGROUND DECORATION VIEW
+            /// BACKGROUND DECORATION VIEW
 
-      GestureDetector(
-      onTap: () {
-        if (!flagStatusConnexion) {
-          flagProfileEdit = false;
-          flagProfileZoom = false;
-          flagStatusConnexion = false;
-        }
-        initiateSetState();
-    },
-      child:
-        Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration:
-              BoxDecoration(
-                gradient: LinearGradient(
-                  // DEEP BLUE DARK
-                  colors: global.themeAppDark ? global.ColorTheme().colorsViewBackgroundDark
-                      : global.ColorTheme().colorsViewModernBackgroundLight,
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                )
-              ),
+            GestureDetector(
+            onTap: () {
+              if (!flagStatusConnexion) {
+                flagProfileEdit = false;
+                flagProfileZoom = false;
+                flagStatusConnexion = false;
+              }
+              initiateSetState();
+          },
+            child:
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration:
+                  BoxDecoration(
+                    gradient: LinearGradient(
+                      // DEEP BLUE DARK
+                      colors: global.themeAppDark ? global.ColorTheme().colorsViewBackgroundDark
+                          : global.ColorTheme().colorsViewModernBackgroundLight,
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    )
+                  ),
 
-        child:
-            SingleChildScrollView(
-                controller: controllerView,
+                child:
+                SingleChildScrollView(
+                    controller: controllerView,
 
                 child:
                 Column(
@@ -193,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       padding: const EdgeInsets.only(top: 10,),
                       height: 105,
-                      color: Colors.green,
+                      color: global.themeAppDark? Colors.black : Colors.green,
                       child: Center(
                         child: Padding(
                           padding: const EdgeInsets.only(top: 30,),
@@ -274,23 +276,33 @@ class _HomeScreenState extends State<HomeScreen> {
                             child:
 
                             ButtonCircle(
-                                onPressed: () async {
+                              tag: 'Edit photo',
+                              tip: 'Edit photo from gallery',
+                              icon: Icon(Icons.edit, color: global.themeAppDark ? global.ColorTheme().colorFromDarkSub : global.ColorTheme().colorDeepDark,),
+                              colorBackground: global.themeAppDark ? Colors.white12 : Colors.white,
+                              colorBorder: Colors.transparent,
+                              onPressed: () async {
                                   await androidGetFromGallery();
                                   initiateSetState();
                                   await dataUser.setString('profile', androidImageFile!.path);
                                 },
+
                               ),
                             ): const SizedBox(),
 
                         flagProfileEdit? Align(alignment: const Alignment(-0.8,0.8),
                             child:
-                                Container(
+                                SizedBox(
                                   width: 100,
                                   child :
                                   Column(
                                   children: [
                                     ButtonCircle(
-                                      icon: const Icon(Icons.arrow_drop_down_circle_sharp),
+                                      tag: 'status',
+                                      tip: 'Change status connexion',
+                                      icon: Icon(Icons.arrow_drop_down_circle_sharp, color: global.themeAppDark ? global.ColorTheme().colorFromDarkSub : global.ColorTheme().colorDeepDark,),
+                                      colorBackground: global.themeAppDark ? Colors.white12 : Colors.white,
+                                      colorBorder: Colors.transparent,
                                       onPressed: () {
                                         flagStatusConnexion = !flagStatusConnexion;
                                         initiateSetState();
@@ -438,7 +450,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 margin: const EdgeInsets.only(top: 10),
                 padding: EdgeInsets.only(bottom: orientationPortrait ? 0 : 50),
-                height: 100,
+                height: orientationPortrait ? 100 : 110,
                 width: screenWidth,
 
                 child:
@@ -452,18 +464,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+
+                        Text(global.currentUser.myGardenObject.length.toString(),
+                          style:TextStyle(
+                            letterSpacing: 0.25,
+                            color: global.themeAppDark ? global.ColorTheme().colorFromDarkSub : global.ColorTheme().colorDeepDark,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'RobotMono',
+                            fontSize: 32,),
+                        ),
+
+
                         Text('Garden Item ',
                           style:TextStyle(
                             letterSpacing: 0.25,
                             color: global.themeAppDark ? global.ColorTheme().colorFromDark : global.ColorTheme().colorFromLight,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'RobotMono',
-                            fontSize: 16,),
-                        ),
-                        Text(global.currentUser.myGardenObject.length.toString(),
-                          style:TextStyle(
-                            letterSpacing: 0.25,
-                            color: global.ColorTheme().colorDeepDark,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'RobotMono',
                             fontSize: 16,),
@@ -474,6 +489,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+
+                        Text('0',
+                          style:TextStyle(
+                            letterSpacing: 0.25,
+                            color: global.themeAppDark ? global.ColorTheme().colorFromDarkSub : global.ColorTheme().colorDeepDark,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'RobotMono',
+                            fontSize: 32,),
+                        ),
+
+
                         Text('Community ',
                           style:TextStyle(
                             letterSpacing: 0.25,
@@ -481,14 +507,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontWeight: FontWeight.w400,
                             fontFamily: 'RobotMono',
 
-                            fontSize: 16,),
-                        ),
-                        Text('0',
-                          style:TextStyle(
-                            letterSpacing: 0.25,
-                            color: global.ColorTheme().colorDeepDark,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'RobotMono',
                             fontSize: 16,),
                         ),
                       ],

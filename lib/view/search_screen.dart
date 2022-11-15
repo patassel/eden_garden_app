@@ -161,8 +161,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 // DEEP BLUE DARK
                 colors: global.themeAppDark ? global.ColorTheme().colorsViewBackgroundDark
                     : global.ColorTheme().colorsViewModernBackgroundLight,
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
 
@@ -178,16 +178,16 @@ class _SearchScreenState extends State<SearchScreen> {
                   padding: const EdgeInsets.only(top: 10,),
                   height: 105,
                   width: screenWidth,
-                  color: Colors.green,
-                  child : const Center (
+                  color: global.themeAppDark? Colors.black : Colors.green,
+                  child :  Center (
                       child: Padding(
-                          padding: EdgeInsets.only(top: 40,),
+                          padding: const EdgeInsets.only(top: 40,),
                           child :Text("Eden garden library",
                             style: TextStyle(
-                              color: Colors.black87,
+                              color: Colors.green.shade800,
                               fontWeight: FontWeight.w400,
                               fontFamily: 'meri',
-                              fontSize: 24,)))
+                              fontSize: 34,)))
                   ),
                 ),
                 Container(

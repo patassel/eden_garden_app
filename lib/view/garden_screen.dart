@@ -7,13 +7,11 @@ import 'package:eden_garden/model/bottomNavigation/simpleBottomBar.dart';
 import 'package:eden_garden/view/home_screen.dart';
 import 'package:eden_garden/view/gardenArticle/garden_article_info_screen.dart';
 import 'package:eden_garden/view/search_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:pie_chart/pie_chart.dart';
-
-//import 'package:eden_garden/controllers/dataBase_controller.dart';
-//import 'package:eden_garden/controllers/route_management.dart';
-
 import 'package:eden_garden/controllers/globals.dart' as global;
 
 
@@ -25,7 +23,6 @@ class GardenScreen extends StatefulWidget {
 
   @override
   State<GardenScreen> createState() => _GardenScreenState();
-
 
 }
 
@@ -41,13 +38,11 @@ class _GardenScreenState extends State<GardenScreen> {
   late ScrollController controllerView = ScrollController();
 
   late bool flagCharts = false;
-  late bool flagChartsFilter = false;   // false:Type - true:VFO
-
+  late bool flagChartsFilter = false;   // false:species - true:VFO
   late bool flagGarden = true;
 
-  late List<int> countType = [];
 
-  Map<String, double> dataMapChartType = {
+  Map<String, double> dataMapChartSpecies = {
     "Herbs": 5,
     "Trees": 3,
     "Shrubs": 2,
@@ -85,9 +80,7 @@ class _GardenScreenState extends State<GardenScreen> {
   void initState() {
     super.initState();
     from = widget.from;
-    //print("My Garden " + global.currentUser.myGarden.toString());
-    /// Initiate User Object
-    //getUserDB("pfTjVgNet8ggVpNOAfas");
+
   }
 
   initiateSetState() {setState(() {});}
@@ -97,7 +90,6 @@ class _GardenScreenState extends State<GardenScreen> {
     //WidgetsBinding.instance.removeObserver(this);
     controllerView.dispose();
     super.dispose();
-    //initiateSetState();
   }
 
   @override
@@ -108,10 +100,9 @@ class _GardenScreenState extends State<GardenScreen> {
 
     return WillPopScope(
         onWillPop: () async{ return _onWillPop();},
-    child:Scaffold(
+        child:Scaffold(
 
         key: scaffoldKey,
-
         drawer:  AppDrawer(from: "garden", function: initiateSetState,),
 
         bottomNavigationBar: orientationPortrait ? SimpleBottomBar(
@@ -154,11 +145,9 @@ class _GardenScreenState extends State<GardenScreen> {
 
 
         body:
-        /// BODY -----------------------------------------------------------------
+        /// BODY view ----------------------------------------------------------
 
         /// BACKGROUND DECORATION VIEW
-
-
         Container(
           height: double.infinity,
           width: double.infinity,
@@ -177,24 +166,24 @@ class _GardenScreenState extends State<GardenScreen> {
               SingleChildScrollView(
                 controller: controllerView,
                   child:
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              //mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                /// Top View -----------------------------------------------
-                Container(
-                  padding: const EdgeInsets.only(top: 10,),
-                  height: 105,
-                  color: Colors.green,
-                  child: Center(
-                    child: Padding(
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  //mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    /// Top View -----------------------------------------------
+                    Container(
+                      padding: const EdgeInsets.only(top: 10,),
+                      height: 105,
+                      color: global.themeAppDark? Colors.black : Colors.green,
+                      child: Center(
+                        child: Padding(
                         padding: const EdgeInsets.only(top: 30,),
                         child :Text("My Eden garden",
                             style: TextStyle(
                               color: Colors.lightGreen.shade300,
                               fontWeight: FontWeight.w400,
                               fontFamily: 'meri',
-                              fontSize: 24,))),
+                              fontSize: 34,))),
                   ),
                 ),
 
@@ -208,7 +197,7 @@ class _GardenScreenState extends State<GardenScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            /// Chart On tap
+                            /// Charts
                             GestureDetector(
                                 onTap: () async {
                                   flagCharts = !flagCharts;
@@ -217,11 +206,11 @@ class _GardenScreenState extends State<GardenScreen> {
 
 
                                   final charts = countGardenType();
-                                  dataMapChartType["Herbs"] = charts[0].toDouble();
-                                  dataMapChartType["Trees"] = charts[1].toDouble();
-                                  dataMapChartType["Shrubs"] = charts[2].toDouble();
-                                  dataMapChartType["Creepers"] = charts[3].toDouble();
-                                  dataMapChartType["Climbers"] = charts[4].toDouble();
+                                  dataMapChartSpecies["Herbs"] = charts[0].toDouble();
+                                  dataMapChartSpecies["Trees"] = charts[1].toDouble();
+                                  dataMapChartSpecies["Shrubs"] = charts[2].toDouble();
+                                  dataMapChartSpecies["Creepers"] = charts[3].toDouble();
+                                  dataMapChartSpecies["Climbers"] = charts[4].toDouble();
 
 
                                   initiateSetState();
@@ -253,6 +242,7 @@ class _GardenScreenState extends State<GardenScreen> {
                                   ],)
                             ),
 
+                            /// List of Garden item(s)
                             GestureDetector(
                                 onTap: () {
                                   flagGarden = !flagGarden;
@@ -348,11 +338,11 @@ class _GardenScreenState extends State<GardenScreen> {
                     )
                 ) : const SizedBox(),
 
-
                 ///---------------------------------------------------------
-                const SizedBox(height: 50,),
-                /// BODY VIEW  ---------------------------------------------------
 
+                const SizedBox(height: 50,),
+
+                /// BODY VIEW  ---------------------------------------------------
 
                 /// List of Garden Item ------------------------------------
                 flagGarden?ListView.builder(
@@ -395,7 +385,6 @@ class _GardenScreenState extends State<GardenScreen> {
 
                 /// Circle Charts Shrubs Herbs and Tree
                 flagCharts ?
-
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -416,7 +405,7 @@ class _GardenScreenState extends State<GardenScreen> {
                     SlideAnimationController(
                         delay: 500,
                         child: PieChart(
-                          dataMap: flagChartsFilter? dataMapChartType : dataMapChartVFO,
+                          dataMap: flagChartsFilter? dataMapChartSpecies : dataMapChartVFO,
                           animationDuration: const Duration(milliseconds: 2500),
                           chartLegendSpacing: 32,
                           chartRadius: orientationPortrait ? screenWidth / 2 : screenWidth / 4,
@@ -442,16 +431,6 @@ class _GardenScreenState extends State<GardenScreen> {
                             showChartValuesOutside: true,
                             decimalPlaces: 0,
                           ),
-                          //gradientList: gradientList,
-                          /* colorList: const [
-                                  Color(0xFFB2FF59),
-                                  Color(0xFF2962FF),
-                                  Color(0xFFFF5252),
-                                  Color(0xFF8530FD),
-                                  Color(0xE62FF),
-                                  //Color(0xFF009688),
-                                ],
-                                */
                           colorList: const [
                             Color.fromRGBO(0, 255, 0, 1),
                             Color.fromRGBO(75, 0, 130, 1),
@@ -475,6 +454,8 @@ class _GardenScreenState extends State<GardenScreen> {
 
   }
 
+
+  /// Calculate Charts values
   List<int> countGardenType(){
 
     if (flagChartsFilter) {
@@ -499,7 +480,6 @@ class _GardenScreenState extends State<GardenScreen> {
           countClimbers++;
         }
       }
-      //print("Species : ${[countHerbs, countTree, countShrubs, countCreepers, countClimbers]}");
       return [countHerbs, countTree, countShrubs, countCreepers, countClimbers];
     }else{
       var countFruit = 0;
@@ -518,7 +498,6 @@ class _GardenScreenState extends State<GardenScreen> {
           countMoss++;
         }
       }
-      //print("Product : ${[countVegetable, countFruit, countFlower, countMoss]}");
 
       return [countVegetable, countFruit, countFlower, countMoss];
 
@@ -526,6 +505,7 @@ class _GardenScreenState extends State<GardenScreen> {
 
   }
 
+  /// Back Button from Mobile
   Future<bool> _onWillPop() async {
     return (await showDialog(
       context: context,
@@ -556,13 +536,7 @@ class _GardenScreenState extends State<GardenScreen> {
               */
           ),
           SizedBox(width: orientationPortrait ?  screenWidth*0.28: screenWidth*0.38,),
-          /*TextButton(
-            //onPressed: () => Navigator.of(context).pop(true),
-            onPressed: () => SystemNavigator.pop(),
-            child: const Text('Yes'),
-          ),
 
-           */
           ButtonRect(
               title: "Yes",
               colorBorder: Colors.transparent,

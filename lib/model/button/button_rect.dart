@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 class ButtonRect extends StatelessWidget {
 
   final String title;
+  final double titleSize;
   final double height;
   final double width;
   final Color colorBorder;
@@ -18,7 +19,7 @@ class ButtonRect extends StatelessWidget {
 
 
 
-   const ButtonRect({Key? key, required this.title, required this.colorBorder, this.height = 50, this.width = 80,
+   const ButtonRect({Key? key, required this.title, this.titleSize = 15, required this.colorBorder, this.height = 50, this.width = 80,
     required this.colorBackground , required this.colorHover,  required this.colorText, required this.onclickButton, required this.onHoverMouse})
       : super(key: key);
 
@@ -57,7 +58,7 @@ class ButtonRect extends StatelessWidget {
                     color: colorText,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Open Sans',
-                    fontSize: 15,)
+                    fontSize: titleSize,)
               ),
             ),
           ),

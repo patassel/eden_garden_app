@@ -1,4 +1,6 @@
+import 'package:eden_garden/view/garden_screen.dart';
 import 'package:eden_garden/view/home_screen.dart';
+import 'package:eden_garden/view/search_screen.dart';
 import 'package:eden_garden/view/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:eden_garden/controllers/drawer_route.dart';
@@ -26,12 +28,14 @@ class AppDrawer extends StatelessWidget {
         children: <Widget>[
 
           UserAccountsDrawerHeader(
+            /// Eden Garden Logo
+            currentAccountPicture: Image.asset('assets/edenLogo.jpg', height: 50,),
             decoration:
             BoxDecoration(
 
                 gradient: LinearGradient(
                   // DEEP BLUE DARK
-                  colors: global.themeAppDark ? global.ColorTheme().colorsViewBackgroundDark
+                  colors: global.themeAppDark ? global.ColorTheme().colorsDrawBackgroundLight
                       : global.ColorTheme().colorsViewModernBackgroundLight,
 
                   begin: Alignment.bottomLeft,
@@ -59,12 +63,21 @@ class AppDrawer extends StatelessWidget {
             //currentAccountPicture: ,
 
           ),
-          Divider(height: 0, color: global.ColorTheme().colorFromLight),
-          DrawerRoute("Home", "/home" , Icon(Icons.home, color: global.ColorTheme().colorFromDark,), const HomeScreen(from: "drawer"), from=="home"? "pushReplacement" : "push", function!),
+          DrawerRoute("Account", "/home" , Icon(Icons.home, color: global.ColorTheme().colorFromDark,), const HomeScreen(from: "drawer"), from=="home"? "pushReplacement" : "push", function!),
 
-          Divider(height: 0, color: global.ColorTheme().colorFromLight),
+          /// Garden library
+          DrawerRoute("Garden library", "/search" , Icon(Icons.local_library, color: global.ColorTheme().colorFromDark,), const SearchScreen(from: "drawer"), from=="search"? "pushReplacement" : "push", function!),
+
+          /// My Eden garden
+          DrawerRoute("Eden garden", "/garden" , Icon(Icons.menu_book, color: global.ColorTheme().colorFromDark,), const GardenScreen(from: "drawer"), from=="garden"? "pushReplacement" : "push", function!),
+
+          /// Contact
+
+
+          Divider(height: 1, color: global.ColorTheme().colorFromDark),
           DrawerRoute("Settings", "/settings" , Icon(Icons.settings, color: global.ColorTheme().colorFromDark,), SettingsScreen(from: "drawer", function: function!,),  "push", function!),
 
+          /// Help
 
         ],
       ),

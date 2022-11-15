@@ -1,6 +1,7 @@
+import 'package:eden_garden/controllers/route_management.dart';
 import 'package:eden_garden/controllers/slide_animation_controller.dart';
-import 'package:eden_garden/model/button/button_rect.dart';
 import 'package:eden_garden/model/garden/garden_item.dart';
+import 'package:eden_garden/view/user/user_garden_item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:eden_garden/controllers/globals.dart' as global;
 
@@ -31,13 +32,29 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
   late bool flagDescription = true;
   late bool flagEnvironment = false;
   late bool flagFarm = false;
+  late bool flagManagement = false;
+
   late bool flagDatabaseRequest = false;
   late bool flagReturnDialog = false;
+
+  /*late int nullQuantity;
+  late bool nullNotification = false;
+  late int nullProduction ;
+  late Timestamp nullDate;
+
+   */
 
   @override
   void initState() {
     super.initState();
     from = widget.from;
+    /*nullQuantity = global.currentUser.myGarden[widget.item.idKey]?['quantity'] ?? -1;
+    nullProduction = global.currentUser.myGarden[widget.item.idKey]?['production'] ?? -1;
+    nullNotification = global.currentUser.myGarden[widget.item.idKey]?['notification'] ?? false;
+    nullDate = global.currentUser.myGarden[widget.item.idKey]?['date'] ?? Timestamp(0, 0);
+
+     */
+
   }
 
   @override
@@ -54,6 +71,7 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
     flagDescription = false;
     flagEnvironment = false;
     flagFarm = false;
+    flagManagement = false;
   }
 
   @override
@@ -65,9 +83,9 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
     return Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          backgroundColor: Colors.green,
+          backgroundColor: global.themeAppDark? Colors.black : Colors.green,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: Icon(Icons.arrow_back, color: widget.from=="search" ? Colors.green.shade800 : Colors.lightGreen.shade300),
             onPressed: () {
               Navigator.of(context).pop(context);
               setState(() {
@@ -78,47 +96,97 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
           centerTitle: true,
           title: Text(
             widget.item.idKey,
-            style: TextStyle(fontSize: 34, color: widget.from=="search" ? Colors.black87 : Colors.lightGreen.shade300,
+            style: TextStyle(fontSize: 34, color: widget.from=="search" ? Colors.green.shade800 : Colors.lightGreen.shade300,
                 fontWeight: FontWeight.w400, fontFamily: 'meri'),
           ),
         ),
 
-        /// Footer View
-        bottomNavigationBar: orientationPortrait ? Container(
-          height: 80,
-          color: global.themeAppDark ? Colors.green : Colors.white,
-          child: Stack(
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: ButtonRect(
-                  title: widget.from=="search" ? 'Add to my Eden garden' : 'Snatch from my Eden garden',
-                  height: 50,
-                  width: 200,
-                  colorBorder: Colors.black,
-                  colorBackground: Colors.transparent,
-                  colorHover: Colors.white,
-                  colorText: Colors.black,
-                  onclickButton: () {
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: (!flagDescription && !flagFarm && !flagEnvironment && !flagManagement) ?
 
-                    if (from=='search'){
-                      /// Check if Garden item already exist in my garden list
-                      flagDatabaseRequest = global.currentUser.addGardenItem(widget.item);
-                    }else {
-                      /// Check if Garden item doesn't exist in my garden list
-                      flagDatabaseRequest =
-                          global.currentUser.removeGardenItem(widget.item);
-                    }
-                    initiateInfoValues();
-                    flagReturnDialog = true;
-                    setState(() {});
-                  },
-                  onHoverMouse: (bool val) {  },
-                ),
-              )
-            ],
-          ),
+        SlideAnimationController( delay: 800, child:
+
+            Container(
+              height: 100,
+              width: screenWidth,
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child:
+
+            Stack(
+
+              children: [
+                (!flagDescription && !flagFarm && !flagEnvironment && from=='garden')?
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child:
+                      FloatingActionButton(
+                        heroTag: 'Management',
+                        autofocus: true,
+                        focusElevation: 5,
+                        backgroundColor: global.themeAppDark ? Colors.white12 : Colors.white,
+                        tooltip: 'Open ${widget.item.idKey} management',
+                        child: Icon(Icons.inventory, color: global.themeAppDark ? global.ColorTheme().colorFromDarkSub : global.ColorTheme().colorDeepDark,),
+
+                        /*shape: StadiumBorder(
+                            side: BorderSide(
+                                color: global.themeAppDark ? global.ColorTheme().colorFromDarkSub : global.ColorTheme().colorFromLight,
+                                width: 4)),
+
+                         */
+                        onPressed: () {
+                          Navigator.push(  // push -> Add route on stack
+                            context,
+                            FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                              page: UserGardenItemScreen(item: widget.item), //ContactScreen(),
+                              routeName: 'garden/${widget.item.idKey}/management',
+                            ),
+                          );
+                        },
+
+                      )) : const SizedBox(),
+
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child:
+                        FloatingActionButton(
+                        heroTag: 'Action',
+                        autofocus: true,
+                        focusElevation: 5,
+                        backgroundColor: global.themeAppDark ? Colors.white12 : Colors.white,
+                        tooltip: from=='search' ? 'Add to my Eden garden' : 'Snatch from my Eden garden',
+                        /*shape: StadiumBorder(
+                            side: BorderSide(
+                                color: global.themeAppDark ? global.ColorTheme().colorFromDarkSub : global.ColorTheme().colorFromLight,
+                                width: 4)),
+                         */
+                        onPressed: () async {
+                          if (from=='search'){
+                            /// Check if Garden item already exist in my garden list
+                            flagDatabaseRequest = global.currentUser.addGardenItem(widget.item);
+                          }else {
+                            /// Check if Garden item doesn't exist in my garden list
+                            flagDatabaseRequest =
+                                global.currentUser.removeGardenItem(widget.item);
+                          }
+                          initiateInfoValues();
+                          flagReturnDialog = true;
+                          await Future.delayed(const Duration(milliseconds: 100), () {});
+                          initiateSetState();
+                          await Future.delayed(const Duration(milliseconds: 500), () {});
+
+                          controllerView.jumpTo(
+                          controllerView.position.maxScrollExtent);
+                        },
+
+                        child: Icon(from=="search" ? Icons.add_circle : Icons.delete, color: global.themeAppDark ? global.ColorTheme().colorFromDarkSub : global.ColorTheme().colorDeepDark,),
+                      )),
+              ],
+            ))
+
+
         ) : const SizedBox(),
+
+
 
         body:
         /// BODY -----------------------------------------------------------------
@@ -158,14 +226,18 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
                         scrollDirection: Axis.horizontal,
                         padding: EdgeInsets.only(left: orientationPortrait ? 50 : 150, right: orientationPortrait ? 50: 150, top: 20),
                         children: <Widget>[
+
+
                           GestureDetector(
                               onTap: () async {
                                 flagDescription = !flagDescription;
                                 flagEnvironment = false;
                                 flagFarm = false;
+                                flagManagement = false;
+
                                 flagReturnDialog = false;
+                                await Future.delayed(const Duration(milliseconds: 100), () {});
                                 initiateSetState();
-                                await Future.delayed(const Duration(milliseconds: 500), () {});
 
                                 if(flagDescription) {
                                   controllerView.jumpTo(
@@ -174,6 +246,8 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
                                   controllerView.jumpTo(
                                       controllerView.position.minScrollExtent);
                                 }
+                                await Future.delayed(const Duration(milliseconds: 900), () {});
+
                               },
                               child :
                               Column(
@@ -201,9 +275,11 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
                                 flagEnvironment = !flagEnvironment;
                                 flagDescription = false;
                                 flagFarm = false;
+                                flagManagement = false;
                                 flagReturnDialog = false;
+                                await Future.delayed(const Duration(milliseconds: 100), () {});
                                 initiateSetState();
-                                await Future.delayed(const Duration(milliseconds: 500), () {});
+
                                 if(flagEnvironment) {
                                   controllerView.jumpTo(
                                       controllerView.position.maxScrollExtent);
@@ -211,6 +287,8 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
                                   controllerView.jumpTo(
                                       controllerView.position.minScrollExtent);
                                 }
+                                await Future.delayed(const Duration(milliseconds: 900), () {});
+
                               },
                               child :
                               Column(
@@ -238,11 +316,11 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
                                 flagFarm = !flagFarm;
                                 flagDescription = false;
                                 flagEnvironment = false;
+                                flagManagement = false;
+
                                 flagReturnDialog = false;
-
+                                await Future.delayed(const Duration(milliseconds: 100), () {});
                                 initiateSetState();
-
-                                await Future.delayed(const Duration(milliseconds: 500), () {});
 
                                 if(flagFarm) {
                                   controllerView.jumpTo(
@@ -251,6 +329,8 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
                                   controllerView.jumpTo(
                                       controllerView.position.minScrollExtent);
                                 }
+                                await Future.delayed(const Duration(milliseconds: 900), () {});
+
                               },
                               child :
                               Column(
@@ -279,33 +359,41 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
               /// --------------------------------------------------------------
 
                   /// Image of Garden item
-                  flagDescription || (!flagDescription && !flagFarm && !flagEnvironment)?
+                  flagDescription || (!flagDescription && !flagFarm && !flagEnvironment && !flagManagement)?
                   GestureDetector(
                     onLongPress: () async {
                       await showFullImage();
                     },
-                    child: Container(
-                      padding: EdgeInsets.only(top: orientationPortrait ? 30 : 0, bottom: 30,),
-                      height: 200,
-                      width: screenWidth*0.8,
-                      decoration : BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage("https://${widget.item.image}"),
-                            fit: BoxFit.cover
-                        ),
-                        gradient: LinearGradient(
-                          // DEEP BLUE DARK
-                          colors: global.themeAppDark ? global.ColorTheme().colorsViewNormalBackgroundLight
-                              : global.ColorTheme().colorsViewNormalBackgroundLight,
+                    child:
 
-                          begin: Alignment.bottomLeft,
-                          end: Alignment.topRight,
-                        ),
-                        borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+                    AnimatedSize(
+                      duration: const Duration(seconds: 1),
+                      child:
+                        Container(
+                          margin: EdgeInsets.only(top: orientationPortrait ? 30 : 0, bottom: 10,),
+                          height: (!flagDescription && !flagFarm && !flagEnvironment && !flagManagement) ? 300 : 200,
+                          width: screenWidth,
+                          decoration : BoxDecoration(
+                            image: DecorationImage(
+                                image: NetworkImage("https://${widget.item.image}"),
+                                fit: BoxFit.cover
+                            ),
+                            gradient: LinearGradient(
+                              // DEEP BLUE DARK
+                              colors: global.themeAppDark ? global.ColorTheme().colorsViewNormalBackgroundLight
+                                  : global.ColorTheme().colorsViewNormalBackgroundLight,
 
-                      ),
-                    ),
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
+                            ),
+
+                          ),
+                        )),
                   ) : const SizedBox(),
+
+
+
+
 
 
                   /// general description
@@ -450,7 +538,8 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
                         ),
                       ),
 
-                        ],
+
+                    ],
                       )
                     ],
                   )) : const SizedBox(),
@@ -612,7 +701,7 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
               ) : const SizedBox(),
 
 
-
+                  SizedBox(height: flagReturnDialog? 50 : 0,)
 
                   ///---------------------------------------------------------
 
@@ -630,12 +719,12 @@ class _GardenArticleInfoScreenState extends State<GardenArticleInfoScreen> {
         barrierDismissible: true,
         barrierLabel: MaterialLocalizations.of(context)
         .modalBarrierDismissLabel,
-    barrierColor: Colors.black45,
-    transitionDuration: const Duration(milliseconds: 800),
-    pageBuilder: (BuildContext buildContext,
-    Animation animation,
-    Animation secondaryAnimation) {
-          return
+        barrierColor: Colors.black45,
+        transitionDuration: const Duration(milliseconds: 800),
+        pageBuilder: (BuildContext buildContext,
+        Animation animation,
+        Animation secondaryAnimation) {
+              return
             GestureDetector(
               onTap: () => Navigator.of(context).pop(),
               child: Center(

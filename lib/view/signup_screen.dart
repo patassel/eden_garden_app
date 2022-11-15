@@ -238,7 +238,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 pseudo: _pseudoFieldController.text,
                 email: _emailFieldController.text,
                 password: _passwordFieldController.text,
-                myGarden: [],
+                myGarden: {},
               );
 
               await Future.delayed(const Duration(milliseconds: 500), () {});

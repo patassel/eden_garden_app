@@ -3,7 +3,6 @@ import 'package:eden_garden/model/button/button_rect.dart';
 import 'package:eden_garden/model/user_db.dart';
 import 'package:flutter/material.dart';
 
-
 import 'package:eden_garden/controllers/globals.dart' as global;
 
 
@@ -52,12 +51,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     super.dispose();
   }
 
-
-
   initiateSetState() {setState(() {});}
-
-
-
 
 
   @override
@@ -99,10 +93,10 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           decoration:  BoxDecoration(
             gradient: LinearGradient(
               // DEEP BLUE DARK
-              colors: themeSwitchVal ? global.ColorTheme().colorsViewBackgroundDark
+              colors: themeSwitchVal ? global.ColorTheme().colorsViewSubBackgroundDark
                   : global.ColorTheme().colorsViewModernBackgroundLight,
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
           ),
 
@@ -122,7 +116,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     children: [
                       Text("General", style: TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w600,
-                          color: themeSwitchVal ? Colors.white : Colors.green)),
+                          color: themeSwitchVal ? Colors.white : Colors.black),
+                      ),
                     ],
                   ),
 
@@ -136,7 +131,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         title: Text("Full name", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
                             : global.ColorTheme().colorFromLight )),
                         subtitle: Text(widget.user.fullName, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
-                            : Colors.blueGrey)),
+                            : Colors.green)),
                         onTap: () {
                         _textFieldController.clear();
                         _displayTextInputDialog(context, "name", widget.user.fullName);
@@ -155,7 +150,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         title: Text("Pseudo", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
                             : global.ColorTheme().colorFromLight )),
                       subtitle: Text(widget.user.pseudo, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
-                          : Colors.blueGrey)),
+                          : Colors.green)),
                       onTap: () {
                         _textFieldController.clear();
                         _displayTextInputDialog(context, "ps", widget.user.pseudo);
@@ -173,7 +168,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         title: Text("Phone Number", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
                             : global.ColorTheme().colorFromLight )),
                       subtitle: Text(widget.user.phone, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
-                          : Colors.blueGrey)),
+                          : Colors.green)),
                       onTap: () {
                         _textFieldController.clear();
                         _displayTextInputDialog(context, "ph", widget.user.phone);
@@ -190,7 +185,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         title: Text("Email", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
                             : global.ColorTheme().colorFromLight )),
                         subtitle: Text(widget.user.email, style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
-                            : Colors.blueGrey)),
+                            : Colors.green)),
                         onTap: () {
                           _textFieldController.clear();
                           _displayTextInputDialog(context, "e", widget.user.email);
@@ -203,7 +198,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     children: [
                       Text("Security", style: TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w600,
-                          color: themeSwitchVal ? Colors.white : Colors.green)),
+                          color: themeSwitchVal ? Colors.white : Colors.black),
+                      ),
                     ],
                   ),
 
@@ -217,7 +213,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         title: Text("Password", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
                             : global.ColorTheme().colorFromLight )),
                         subtitle: Text("******", style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
-                            : Colors.blueGrey)),
+                            : Colors.green)),
                         onTap: () {
                           _textFieldController.clear();
                           _displayTextInputDialog(context, "pw", widget.user.password);
@@ -225,54 +221,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                       )
                   ),
                   const Divider(),
-
-
-                  /*Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text("Security", style: headingStyle),
-                  ],
-                ),
-                ListTile(
-                  leading: const Icon(Icons.phonelink_lock_outlined),
-                  title: const Text("Lock app in background"),
-                  trailing: Switch(
-                      value: ThemeSwitchVal,
-                      activeColor: Colors.redAccent,
-                      onChanged: (val) {
-                        setState(() {
-                          ThemeSwitchVal = val;
-                        });
-                      }),
-                ),
-                const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.fingerprint),
-                  title: const Text("Use fingerprint"),
-                  trailing: Switch(
-                      value: fingerprintSwitchVal,
-                      activeColor: Colors.redAccent,
-                      onChanged: (val) {
-                        setState(() {
-                          fingerprintSwitchVal = val;
-                        });
-                      }),
-                ),
-                const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.lock),
-                  title: const Text("Change Password"),
-                  trailing: Switch(
-                      value: changePassSwitchVal,
-                      activeColor: Colors.redAccent,
-                      onChanged: (val) {
-                        setState(() {
-                          changePassSwitchVal = val;
-                        });
-                      }),
-                ),
-
-                 */
 
                 ],
               ),
@@ -282,6 +230,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     );
   }
 
+  /// Show dialog confirmation
   Future<void> _displayTextInputDialog(BuildContext context, String title, String oldValue) async {
     return showDialog(
         context: context,
@@ -359,7 +308,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 });
               },
             ) : const SizedBox(),
-            SizedBox(width: orientationPortrait ?  screenWidth*0.28: screenWidth*0.65,),
+
+            SizedBox(width: orientationPortrait ?  screenWidth*0.28: screenWidth*0.65,), // Space between
+
             (!orientationPortrait && !textFocusNode.hasFocus) || (orientationPortrait && !textFocusNode.hasFocus) ? ButtonRect(
               title: "SAVE",
               colorBorder: Colors.transparent,

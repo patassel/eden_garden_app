@@ -25,11 +25,11 @@ class ProfileBodyView extends StatelessWidget {
           BoxDecoration(
               gradient: LinearGradient(
                 // DEEP BLUE DARK
-                colors: global.themeAppDark ? global.ColorTheme().colorsViewNormalBackgroundLight
+                colors: global.themeAppDark ? global.ColorTheme().colorsViewSubBackgroundDark
                     : global.ColorTheme().colorsViewNormalBackgroundLight,
 
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
 
       ),
@@ -39,15 +39,17 @@ class ProfileBodyView extends StatelessWidget {
                 /// BODY VIEW  ---------------------------------------------------
                 ListTile(
                     title: Text("Personal information",
-                        style: TextStyle(color: global.ColorTheme().colorFromLight,
-                        fontWeight: FontWeight.w400,
+
+                        style: TextStyle(
+                          color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,
+                          fontWeight: FontWeight.w400,
                         fontFamily: 'meri',
                         fontSize: 16,)
                     ),
                     //subtitle: Text(global.currentUser.myGardenObject[index].species),
-                    leading: const Icon(Icons.person, color: Color(0xFF101038),),
+                    leading: Icon(Icons.person, color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
                     trailing:  IconButton(
-                      icon : const Icon(Icons.read_more),
+                      icon : Icon(Icons.read_more,color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
                       onPressed: () {
                         Navigator.push(  // push -> Add route on stack
                           context,
@@ -61,24 +63,24 @@ class ProfileBodyView extends StatelessWidget {
 
                 SizedBox(
                   width: screenWidth,
-                  child: Divider(
-                    color: global.themeAppDark ? const Color(0xFF101038) : global.ColorTheme().colorFromLight,
+                  child: const Divider(
+                    color: Colors.black12,
                     thickness: 2,
                   ),),
 
 
                 ListTile(
                     title: Text("Community",
-                    style: TextStyle(
-                        color: global.ColorTheme().colorFromLight,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'meri',
-                        fontSize: 16,)
+                        style: TextStyle(
+                          color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'meri',
+                          fontSize: 16,)
                     ),
                     //subtitle: Text(global.currentUser.myGardenObject[index].species),
-                    leading: const Icon(Icons.people_alt_rounded, color: Color(0xFF101038),),
+                    leading: Icon(Icons.people_alt_rounded, color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
                     trailing:  IconButton(
-                      icon : const Icon(Icons.read_more),
+                      icon : Icon(Icons.read_more,color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
                       onPressed: () {
                         /*Navigator.push(  // push -> Add route on stack
                           context,
@@ -93,23 +95,23 @@ class ProfileBodyView extends StatelessWidget {
                     )),
                 SizedBox(
                   width: screenWidth,
-                  child: Divider(
-                    color: global.themeAppDark ? const Color(0xFF101038) : global.ColorTheme().colorFromLight,
+                  child: const Divider(
+                    color: Colors.black12,
                     thickness: 2,
                   ),),
 
                 ListTile(
                     title: Text("Garden statistics",
                         style: TextStyle(
-                          color: global.ColorTheme().colorFromLight,
+                          color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'meri',
                           fontSize: 16,)
                     ),
                     //subtitle: Text(global.currentUser.myGardenObject[index].species),
-                    leading: const Icon(Icons.bar_chart_sharp, color: Color(0xFF101038),),
+                    leading: Icon(Icons.bar_chart_sharp, color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
                     trailing:  IconButton(
-                      icon : const Icon(Icons.read_more),
+                      icon : Icon(Icons.read_more,color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
                       onPressed: () {
                         /*Navigator.push(  // push -> Add route on stack
                           context,
@@ -126,8 +128,8 @@ class ProfileBodyView extends StatelessWidget {
 
               SizedBox(
                 width: screenWidth,
-                child: Divider(
-                  color: global.themeAppDark ? const Color(0xFF101038) : global.ColorTheme().colorFromLight,
+                child: const Divider(
+                  color: Colors.black12,
                   thickness: 10,
                 ),),
 
@@ -135,15 +137,15 @@ class ProfileBodyView extends StatelessWidget {
                 ListTile(
                     title: Text("Privacy",
                         style: TextStyle(
-                          color: global.ColorTheme().colorFromLight,
+                          color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'meri',
                           fontSize: 16,)
                     ),
                     //subtitle: Text(global.currentUser.myGardenObject[index].species),
-                    leading: const Icon(Icons.privacy_tip, color: Color(0xFF101038),),
+                    leading: Icon(Icons.privacy_tip, color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
                     trailing:  IconButton(
-                      icon : const Icon(Icons.read_more),
+                      icon : Icon(Icons.read_more,color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
                       onPressed: () {
                         /*Navigator.push(  // push -> Add route on stack
                           context,
@@ -158,23 +160,23 @@ class ProfileBodyView extends StatelessWidget {
                     )),
                 SizedBox(
                   width: screenWidth,
-                  child: Divider(
-                    color: global.themeAppDark ? const Color(0xFF101038) : global.ColorTheme().colorFromLight,
+                  child: const Divider(
+                    color: Colors.black12,
                     thickness: 2,
                   ),),
 
                 ListTile(
                     title: Text("Notifications",
                         style: TextStyle(
-                          color: global.ColorTheme().colorFromLight,
+                          color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'meri',
                           fontSize: 16,)
                     ),
                     //subtitle: Text(global.currentUser.myGardenObject[index].species),
-                    leading: const Icon(Icons.notifications, color: Color(0xFF101038),),
+                    leading: Icon(Icons.notifications, color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
                     trailing:  IconButton(
-                      icon : const Icon(Icons.read_more),
+                      icon : Icon(Icons.read_more,color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
                       onPressed: () {
                         /*Navigator.push(  // push -> Add route on stack
                           context,
@@ -189,8 +191,8 @@ class ProfileBodyView extends StatelessWidget {
                     )),
                 SizedBox(
                   width: screenWidth,
-                  child: Divider(
-                    color: global.themeAppDark ? const Color(0xFF101038) : global.ColorTheme().colorFromLight,
+                  child: const Divider(
+                    color: Colors.black12,
                     thickness: 10,
                   ),),
                 ListTile(

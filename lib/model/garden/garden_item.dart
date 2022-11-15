@@ -15,7 +15,11 @@ class GardenItem {
   late String harvest; // harvest of fruit, vegetable or flowers
 
 
-  GardenItem({this.scientist = "", this.idKey = "", this.description = "", this.species = "", this.product = "", this.environment = "", this.farm = "", this.sprinkle="", this.prune="", this.harvest="", this.image = "https://images.pexels.com/photos/4671829/pexels-photo-4671829.jpeg"});
+
+  GardenItem({this.scientist = "", this.idKey = "", this.description = "",
+    this.species = "", this.product = "", this.environment = "", this.farm = "",
+    this.sprinkle="", this.prune="", this.harvest="",
+    this.image = "https://images.pexels.com/photos/4671829/pexels-photo-4671829.jpeg"});
 
   void setIdKey(String newIdKey){
     idKey = newIdKey;

@@ -32,7 +32,6 @@ Future<void> main() async {
 
     if(Platform.isIOS){
       global.currentPlatform = "ios";
-
     }
   }
 
@@ -55,7 +54,6 @@ Future<void> main() async {
         '/userInfo': (context) => UserInfoScreen(from: "main", user:global.currentUser),
         '/myGarden': (context) => const GardenScreen(from: "main"),
         '/settings': (context) => const SettingsScreen(from: "main"),
-
 
       },
 

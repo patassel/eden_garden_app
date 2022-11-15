@@ -8,9 +8,9 @@ class ButtonCircle extends StatelessWidget {
 
   final Icon icon;
   final Function()? onPressed;
+  final String tag;
+  final String tip;
 
-  final double height;
-  final double width;
 
   final Color colorBorder;
   final Color colorBackground;
@@ -18,8 +18,9 @@ class ButtonCircle extends StatelessWidget {
 
   const ButtonCircle({
     Key? key,
-    this.height = 50,
-    this.width = 60,
+    this.tag = "",
+    this.tip = "",
+
     this.onPressed, this.icon = const Icon(Icons.edit),
     this.colorBorder = const Color(0x73000000), this.colorBackground = Colors.white
   }) : super(key: key);
@@ -29,26 +30,25 @@ class ButtonCircle extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlideAnimationController(
             delay: 900,
-            child: Container(
-                  height: height,
-                  width: width,
-                  decoration: BoxDecoration(
-                  color: colorBackground,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: colorBorder,
-                    width: 3,
-                  )),
-                  child: Center(
-                      child:
-                      IconButton(
-                        onPressed: onPressed,
-                        icon: icon,
+            child:
 
-                      ),
+              FloatingActionButton(
+                heroTag: tag,
+                autofocus: true,
+                focusElevation: 5,
+                backgroundColor: colorBackground,
+                tooltip: tip,
+                shape: StadiumBorder(
+                    side: BorderSide(color: colorBorder, width: 4)
+                ),
 
-                    ),
-        )
+                onPressed: () {
+                  onPressed!();
+                },
+
+                child: icon,
+              )
     );
+
   }
 }

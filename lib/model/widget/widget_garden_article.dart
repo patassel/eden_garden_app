@@ -45,15 +45,11 @@ class GardenArticleWidget extends StatefulWidget {
     return Container(
 
       height: widget.height,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
 
-          gradient: LinearGradient(
-        // DEEP BLUE DARK
-        colors: global.ColorTheme().colorsViewNormalBackgroundLight,
-        begin: Alignment.bottomLeft,
-        end: Alignment.topRight,
-      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: const Color(0xFFFFFFFF),
+
     ),
 
         child: Column(
@@ -73,6 +69,7 @@ class GardenArticleWidget extends StatefulWidget {
 
            SizedBox(
             width: widget.width,
+
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

@@ -18,7 +18,7 @@ Future dataBaseWriteToId(String id, Map<String, dynamic> js) async{
 
 }
 
-/// Update current User
+/// Update current User key
 Future dataBaseUpdate(String id, String idKey, dynamic valueKey) async{
   await docUser.collection('users').doc(id).update(
       {idKey : valueKey,}

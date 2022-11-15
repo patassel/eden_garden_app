@@ -67,10 +67,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         decoration:  BoxDecoration(
           gradient: LinearGradient(
             // DEEP BLUE DARK
-            colors: themeSwitchVal ? global.ColorTheme().colorsViewBackgroundDark
+            colors: themeSwitchVal ? global.ColorTheme().colorsViewSubBackgroundDark
                 : global.ColorTheme().colorsViewModernBackgroundLight,
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
 

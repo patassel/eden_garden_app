@@ -17,11 +17,12 @@ class SimpleBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: from=="home" ? Colors.greenAccent.shade100 : from=="search" ? Colors.black87: Colors.lightGreen.shade300, width: 5.0))),
+            border: Border(top: BorderSide(color: from=="home" ? Colors.greenAccent.shade100 : from=="search" ? Colors.green.shade800: Colors.lightGreen.shade300, width: 5.0))),
         child: BottomNavigationBar(
           currentIndex: global.currentPage,
-          selectedItemColor: from=="home" ? Colors.greenAccent.shade100 : from=="search" ? Colors.black87 : Colors.lightGreen.shade300,
-          backgroundColor: Colors.green,
+          selectedItemColor: from=="home" ? Colors.greenAccent.shade100 : from=="search" ? Colors.green.shade800: Colors.lightGreen.shade300,
+          backgroundColor: global.themeAppDark ? Colors.black : Colors.green,
+          unselectedItemColor: global.themeAppDark ? Colors.grey : Colors.black12  ,
           showUnselectedLabels: false,
           iconSize: 32,
           selectedIconTheme: const IconThemeData(size: 44),
@@ -38,12 +39,12 @@ class SimpleBottomBar extends StatelessWidget {
 
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'SEARCH',
+              icon: Icon(Icons.local_library),
+              label: 'Library',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.menu_book),
-              label: 'GARDEN',
+              label: 'Garden',
             ),
           ],
         ));

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eden_garden/controllers/dataBase_controller.dart';
 import 'package:eden_garden/model/garden/garden_item.dart';
 import 'package:flutter/services.dart';
@@ -17,9 +18,9 @@ class UserDB {
   late String pseudo;
   late String id;
 
-  late List<String> myGarden;
+  late Map<String, Map<String, dynamic>> myGarden; // garden User information
 
-  late List<GardenItem> myGardenObject = [];
+  late List<GardenItem> myGardenObject = []; // Garden General information
 
   late int online = 1; // 0 : is not online , 1 : is online or 2 : is busy
 
@@ -60,12 +61,18 @@ class UserDB {
   bool addGardenItem(GardenItem newItem){
     bool ret = false;
     /// Check if Garden item already exist in my garden list
-    if (!myGarden.contains(newItem.idKey)){
+    if (!myGarden.keys.contains(newItem.idKey)){
       if (!myGardenObject.contains(newItem)){
-        myGarden.add(newItem.idKey);
+        myGarden[newItem.idKey] = {
+          'quantity' : 0,
+          'production' : 0,
+          'notification' : [false],
+          'date' : Timestamp.now(),
+          'ripe' : 0,
+          'rotten' : 0
+        };
         myGardenObject.add(newItem);
-
-        dataBaseUpdate(id, 'my garden', myGarden);
+        dataBaseUpdate(id, 'garden', myGarden);
         ret = true;
       }
     }
@@ -75,11 +82,11 @@ class UserDB {
   bool removeGardenItem(GardenItem item){
     bool ret = false;
     /// Check if Garden item exist in my garden list
-    if (myGarden.contains(item.idKey)) {
+    if (myGarden.keys.contains(item.idKey)) {
       myGarden.remove(item.idKey);
       myGardenObject.remove(item);
       //print('DATABASE' + myGarden.toString());
-      dataBaseUpdate(id, 'my garden', myGarden);
+      dataBaseUpdate(id, 'garden', myGarden);
       ret = true;
     }
     return ret;
@@ -89,7 +96,7 @@ class UserDB {
     final String response = await rootBundle.loadString('data/jsonData.json');
     //print(response);
     global.docGarden = await json.decode(response);
-    for (var item in myGarden){
+    for (var item in myGarden.keys){
       //print(item);
       myGardenObject.add(GardenItem(
         idKey: item,
@@ -99,9 +106,10 @@ class UserDB {
         product: global.docGarden[item]['product'],
         environment: global.docGarden[item]['environment'],
         farm: global.docGarden[item]['farm'],
-
         image: global.docGarden[item]['image'].toString().replaceAll(' ', ''),
       ));
+
+
     }
   }
 
@@ -116,7 +124,7 @@ class UserDB {
       "pseudo": pseudo,
       "email": email,
       "password": password,
-      "my garden": myGarden,
+      "garden": myGarden,
     };
     return ret;
   }
@@ -128,7 +136,7 @@ class UserDB {
     pseudo = js['pseudo'];
     phone = js['phone'];
     password = js['password'];
-    myGarden = List<String>.from(js['my garden']);
+    myGarden = Map<String, Map<String, dynamic>>.from(js['garden']);
   }
 
 }
