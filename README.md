@@ -4,7 +4,7 @@ This application is available on Web, Android, Windows and IOS soon.
 
 I present you up down somes screen.
 
-Dowload APK version 1.23 in the 'apk' folder
+Dowload APK version 1.32 in the 'apk' folder
 
 
 ## What you can find in this project ?
