@@ -42,12 +42,7 @@ Edit profil                |  Item management          |
 
 Eden Community             |         
 :-------------------------:|
-<video src="https://user-images.githubusercontent.com/35902416/202824925-b3ac361d-c173-4849-9df4-79e3e9d82a89.mp4"  width="300" height="600">  |
-
-
-
-
-
+<video src="https://user-images.githubusercontent.com/35902416/203052034-c58ca491-ef8b-4934-91ae-298601c4aa09.mp4"  width="300" height="600">  |
 
 
 
