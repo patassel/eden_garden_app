@@ -1,10 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="garden.com.eden_garden">
    <application
-        android:label="eden_garden"
+        android:label="Eden Garden"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
+            android:requestLegacyExternalStorage="true"
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"

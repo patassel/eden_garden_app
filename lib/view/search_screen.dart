@@ -1,16 +1,17 @@
+import 'package:eden_garden/controllers/dataBase_controller.dart';
 import 'package:eden_garden/controllers/route_management.dart';
-import 'package:eden_garden/model/button/button_rect.dart';
+import 'package:eden_garden/model/dialog/show_dialog.dart';
 import 'package:eden_garden/model/garden/article/garden_article.dart';
 import 'package:eden_garden/model/garden/article/list_article_garden.dart';
 import 'package:eden_garden/model/bottomNavigation/simpleBottomBar.dart';
 import 'package:eden_garden/model/drawer/drawer_style.dart';
+import 'package:eden_garden/model/user_db.dart';
 import 'package:eden_garden/view/garden_screen.dart';
 import 'package:eden_garden/view/home_screen.dart';
 import 'package:eden_garden/model/widget/widget_grid_garden_article.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eden_garden/controllers/globals.dart' as global;
-import 'package:flutter/services.dart';
 
 
 // TODO Scrollable listview horizontal
@@ -40,7 +41,7 @@ class _SearchScreenState extends State<SearchScreen> {
   late double screenHeight ;
   late bool orientationPortrait = false;
 
-  late bool prefixIcon = true;
+  late bool prefixIconColor = true;
 
   late GardenArticleList listOfGardenArticle;
   late GardenArticleList listOfGardenFilter;
@@ -52,18 +53,19 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
     from = widget.from;
+    global.currentPage = 1;
 
     listOfGardenArticle = GardenArticleList.fromList(
         [
           for (var item in global.docGarden.keys)
-          GardenArticle(title : item, information: global.docGarden[item]),
+          GardenArticle(item.toLowerCase(), global.docGarden[item]),
         ]
     );
 
     listOfGardenFilter = GardenArticleList.fromList(
         [
           for (var item in global.docGarden.keys)
-            GardenArticle(title : item, information: global.docGarden[item]),
+            GardenArticle(item.toLowerCase(), global.docGarden[item]),
         ]
     );
     //print('INIT ' + listOfGardenArticle.articleList.length.toString());
@@ -75,11 +77,11 @@ class _SearchScreenState extends State<SearchScreen> {
 
     if (_textFieldController.text.isEmpty){
       //print("EMPTY");
-      prefixIcon = true;
+      prefixIconColor = true;
 
     }else {
       //print("FULL");
-      prefixIcon = false;
+      prefixIconColor = false;
 
     }
     setState(() {
@@ -152,10 +154,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
           /// BACKGROUND DECORATION VIEW
           Container(
-
             height: double.infinity,
             width: double.infinity,
-
             decoration:  BoxDecoration(
               gradient: LinearGradient(
                 // DEEP BLUE DARK
@@ -221,7 +221,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
                              */
                             if (listOfGardenArticle.articleList[i].title
-                                .contains(value)) {
+                                .contains(value.toLowerCase())) {
                               listOfGardenFilter.addArticle(
                                   listOfGardenArticle.articleList[i]);
 
@@ -231,7 +231,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           listOfGardenFilter = GardenArticleList.fromList(
                               [
                                 for (var item in global.docGarden.keys)
-                                  GardenArticle(title : item, information: global.docGarden[item]),
+                                  GardenArticle(item.toLowerCase(), global.docGarden[item]),
                               ]
                           );
                         }
@@ -258,7 +258,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     },
 
                   controller: _textFieldController,
-                  decoration: prefixIcon ? InputDecoration(
+                  decoration: prefixIconColor ? InputDecoration(
                       focusedBorder:OutlineInputBorder(
                         borderSide: const BorderSide(color: Colors.black, width: 2.0),
                         borderRadius: BorderRadius.circular(25.0),
@@ -315,54 +315,23 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<bool> _onWillPop() async {
-    return (await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Are you sure ?\n'),
-        content: const Text('Do you want to sign out and exit Eden garden ?'),
-        actions: <Widget>[
-          ButtonRect(
-            title: "No",
-            colorBorder: Colors.transparent,
-            colorBackground: Colors.transparent,
-            colorHover: Colors.black,
-            colorText: global.ColorTheme().colorDeepDark,
-            onclickButton: () {
-              setState(() =>Navigator.pop(context));
+    return (await AlertDialogApp(
+        context: context,
+        onAccept: () async {
+          await dataBaseUpdate(global.currentUser.id, 'status', 0);
+          global.currentUser = UserDB(id: 'id', fullName: 'fullName');
+          setState(() =>Navigator.pop(context));
+        },
 
-            },
-            onHoverMouse: (val) {}
-             /* setState(()
-              {
-                if (val) {
-                  colorTextCancel = Colors.white;
-                }else{
-                  colorTextCancel = global.ColorTheme().colorFromLight;
-                }
-              });
-            },
-              */
-          ),
-          SizedBox(width: orientationPortrait ?  screenWidth*0.28: screenWidth*0.38,),
-          /*TextButton(
-            //onPressed: () => Navigator.of(context).pop(true),
-            onPressed: () => SystemNavigator.pop(),
-            child: const Text('Yes'),
-          ),
+        onRefuse: () async {
 
-           */
-          ButtonRect(
-              title: "Yes",
-              colorBorder: Colors.transparent,
-              colorBackground: Colors.transparent,
-              colorHover: Colors.black,
-              colorText: global.ColorTheme().colorDeepDark,
-              onclickButton: () => SystemNavigator.pop(),
-              onHoverMouse: (val) {}
+        },
+        title: 'Are you sure ?\n',
+        body: 'Do you want to sign out ?',
+        accept: 'YES',
+        refuse: 'NO'
 
-          ),
-        ],
-      ),
-    ));
+
+    ).normalShowDialog());
   }
 }

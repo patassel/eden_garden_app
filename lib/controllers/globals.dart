@@ -2,14 +2,21 @@ library my_prj.globals;
 
 import 'package:eden_garden/model/user_db.dart';
 import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 String currentPlatform = "web"; // Current platform environment
 bool themeAppDark = true; // If true app is on Dark theme else Light theme
 bool currentUserExist = false; // true if User exist
 int currentPage = 0; // 0 Account - 1 Search - 2 Garden
-UserDB currentUser = UserDB(fullName: 'user', id: 'id', myGarden: {}); // Current User object
+UserDB currentUser = UserDB(fullName: 'user', id: 'id'); // Current User object
 Map<String, dynamic> docGarden = {}; // Data Json about garden item
 
+final GlobalKey<NavigatorState> navState = GlobalKey<NavigatorState>(); // Pointer navigator App
+bool dialogNetworkActivity = false; // Dialog Network activity
+
+
+late SharedPreferences dataUser;
 
 
 class ColorTheme {
@@ -116,3 +123,4 @@ class ColorTheme {
 
 
 }
+

@@ -236,24 +236,26 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
         context: context,
         builder:
             (context) => StatefulBuilder(builder : (context, setState)  => AlertDialog(
-          title: Center(child :
-          Text(
-            title=="name" ? "Enter a new full name" :
-            title=="pw" ? "Enter a new password" :
-            title=="ps" ? "Enter a new pseudo" :
-            title=="e" ? "Enter a new email" :
-            title=="ph" ? "Enter a new phone number" : "Error!",
-            style: TextStyle(
-                color: global.ColorTheme().colorFromLight,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'meri',
-                fontSize: 22),
+              actionsAlignment: MainAxisAlignment.spaceBetween,
 
-          )),
-          content: SizedBox(
-            height: screenHeight*0.1,
-            width: screenWidth*0.8,
-            child :Center(
+              title: Center(child :
+              Text(
+                title=="name" ? "Enter a new full name" :
+                title=="pw" ? "Enter a new password" :
+                title=="ps" ? "Enter a new pseudo" :
+                title=="e" ? "Enter a new email" :
+                title=="ph" ? "Enter a new phone number" : "Error!",
+                style: TextStyle(
+                    color: global.ColorTheme().colorFromLight,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'meri',
+                    fontSize: 22),
+
+              )),
+              content: SizedBox(
+                height: screenHeight*0.1,
+                width: screenWidth*0.8,
+                child :Center(
                 child:TextField(
                   onSubmitted: (val){
                     textFocusNode.unfocus();
@@ -309,7 +311,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               },
             ) : const SizedBox(),
 
-            SizedBox(width: orientationPortrait ?  screenWidth*0.28: screenWidth*0.65,), // Space between
 
             (!orientationPortrait && !textFocusNode.hasFocus) || (orientationPortrait && !textFocusNode.hasFocus) ? ButtonRect(
               title: "SAVE",

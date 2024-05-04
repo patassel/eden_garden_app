@@ -1,7 +1,9 @@
+import 'package:eden_garden/model/user_db.dart';
 import 'package:flutter/material.dart';
 
-
 import 'package:eden_garden/controllers/globals.dart' as global;
+
+import '../controllers/dataBase_controller.dart';
 
 
 class SettingsScreen extends StatefulWidget {
@@ -204,7 +206,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         });
                       }),
                 ),
-
                  */
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -247,8 +248,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: Text("Sign Out", style: TextStyle( color: global.themeAppDark ? global.ColorTheme().colorFromDark
                           : global.ColorTheme().colorFromLight )),
                       onTap: () {
-
-
+                        dataBaseUpdate(global.currentUser.id, 'status', 0);
+                        global.currentUser = UserDB(id: 'id', fullName: 'fullName');
                         Navigator.of(context).popUntil(ModalRoute.withName('/login'));
 
                       },

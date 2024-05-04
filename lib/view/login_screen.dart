@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eden_garden/controllers/dataBase_controller.dart';
 import 'package:eden_garden/controllers/route_management.dart';
 import 'package:eden_garden/controllers/slide_animation_controller.dart';
+import 'package:eden_garden/model/user_db.dart';
 import 'package:eden_garden/view/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:eden_garden/view/signUp_screen.dart';
@@ -10,7 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:eden_garden/controllers/globals.dart' as global;
 
-
+/// LoginScreen For User to sign in or sign up
 class LoginScreen extends StatefulWidget {
   final String from;
   const LoginScreen({Key? key, required this.from}) : super(key: key) ;
@@ -18,6 +18,7 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
+
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordFieldController = TextEditingController();
@@ -40,7 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.black,
         appBar: AppBar(
           backgroundColor: Colors.black,
-          //leading: buildButton(),
           title: const Center( child :Text(
             "Welcome to the Eden Garden",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'meri'),
@@ -158,16 +158,14 @@ class _LoginScreenState extends State<LoginScreen> {
           var emailValue = _emailFieldController.value.text;
           var passwordValue = _passwordFieldController.value.text;
 
+          UserDB testUser = UserDB(id : 'id', fullName: 'fullName');
           /// Check Email exist
 
           if(emailValue.isNotEmpty) {
-            if (await dataBaseCheckUserId(_emailFieldController.text)){
-              final snapShot = await FirebaseFirestore.instance
-                  .collection('id')
-                  .doc(emailValue)
-                  .get();
+            if (await dataBaseCheckUserId(emailValue)){
+              String userID = await dataBaseGetUserID(emailValue);
               documentExist=true;
-              dataBaseRead(snapShot.data()!['id']);
+              testUser = await dataBaseGetUser(userID);
             }else{
               documentExist=false;
             }
@@ -177,8 +175,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
           /// Check password error
           if(documentExist){
-            if(global.currentUser.password == passwordValue){
+            if(testUser.password == passwordValue){
               connexionReturn = "Connexion successful";
+              await dataBaseRead(testUser.id);
+              await dataBaseUpdate(global.currentUser.id, 'status', 1);
+              global.currentUser.status = 1;
+
+              setState(() {
+
+              });
+              firebaseGetProfilePicture();
             }else {
               connexionReturn = "Password invalid";
               connexionError = true;
@@ -190,21 +196,23 @@ class _LoginScreenState extends State<LoginScreen> {
             setState(() {});
 
             if (connexionReturn=="Connexion successful") {
-              setState(() {loadingPage = true;});
+              await Future.delayed(const Duration(milliseconds: 500), () {
+                setState(() {loadingPage = true;});
+              });
 
-              await Future.delayed(const Duration(milliseconds: 8000), () {});
-              Navigator.push( // push -> Add route on stack
-                context,
-                FadeInRoute( // FadeInRoute  // ZoomInRoute  // RotationInRoute
-                  page: const HomeScreen(from: "login"), //ContactScreen(),
-                  routeName: '/home',
-                ),
-              );
+              await Future.delayed(const Duration(milliseconds: 8000), () {
+                Navigator.push( // push -> Add route on stack
+                  context,
+                  FadeInRoute( // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                    page: const HomeScreen(from: "login"), //ContactScreen(),
+                    routeName: '/home',
+                  ),
+                );
+              });
 
               await Future.delayed(const Duration(milliseconds: 800), () {});
 
               setState(() {loadingPage = false;});
-
               connexionError = false;
             }
         },
@@ -395,4 +403,24 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Future firebaseGetProfilePicture() async {
+
+    if (global.currentUser.profileUrl.isEmpty) {
+      bool test = await databaseCheckProfilePicture(
+          global.currentUser.id);
+      if (test) {
+        global.currentUser.profileUrl =
+        await databaseUploadProfilePicture(global.currentUser.id);
+
+        await Future.delayed(const Duration(milliseconds: 500), () {});
+
+        dataBaseUpdate(global.currentUser.id, 'profileUrl', global.currentUser.profileUrl);
+      }
+    }
+  }
+
 }
+
+
+
+

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eden_garden/controllers/dataBase_controller.dart';
 import 'package:eden_garden/controllers/slide_animation_controller.dart';
 import 'package:eden_garden/model/button/button_circle.dart';
+import 'package:eden_garden/model/button/button_rect.dart';
 import 'package:eden_garden/model/drawer/drawer_style.dart';
 import 'package:eden_garden/model/garden/garden_item.dart';
 import 'package:flutter/material.dart';
@@ -38,17 +39,25 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
   late int nullProduction ;
   late int nullRipe;
   late int nullRotten ;
-  late List<dynamic> nullNotification = [];
   late Timestamp nullDate;
 
+  late List<dynamic> checkSave;
+
+  late List<dynamic> nullNotification = []; // default : []
+  late List<dynamic> nullSettings = []; // default : [false, false, Timestamp.now(),],
+
+  /// General values
   late bool flagQuantity = false;
   late bool flagProduction = false;
   late bool flagRipe = false;
   late bool flagRotten = false;
-  late bool flagEditSave = true;  // Edit : false , Sav
 
-  // e : true
+  /// Settings values
+  late bool flagSize = false; /// false = gram
+  late bool flagShowDate = false;
 
+  /// Saving mode
+  late bool flagSave = false;  // Edit : false , Sav
 
 
   @override
@@ -58,11 +67,12 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
     nullProduction = global.currentUser.myGarden[widget.item.idKey]?['production'] ?? -1;
     nullRipe = global.currentUser.myGarden[widget.item.idKey]?['ripe'] ?? -1;
     nullRotten = global.currentUser.myGarden[widget.item.idKey]?['rotten'] ?? -1;
-    nullNotification = global.currentUser.myGarden[widget.item.idKey]?['notification'] ?? [];
     nullDate = global.currentUser.myGarden[widget.item.idKey]?['date'] ?? Timestamp(0, 0);
 
+    nullNotification = global.currentUser.myGarden[widget.item.idKey]?['notification'] ?? [];
+    nullSettings = global.currentUser.myGarden[widget.item.idKey]?['settings'] ?? [];
 
-
+    checkSave=[nullQuantity, nullProduction, nullRipe, nullRotten, nullDate];
   }
 
   @override
@@ -73,7 +83,15 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
     //initiateSetState();
   }
 
-  initiateSetState() {setState(() {});}
+  initiateSetState() {
+
+    if (!checkSave.contains(nullQuantity) || !checkSave.contains(nullProduction) || !checkSave.contains(nullRipe) || !checkSave.contains(nullRotten) || !checkSave.contains(nullDate)){
+      flagSave = true;
+    }else{
+      flagSave = false;
+    }
+    setState(() {});
+  }
 
 
   @override
@@ -87,31 +105,26 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
 
         drawer:  AppDrawer(from: "gardenUser", function: initiateSetState,),
 
-
         /// Footer View
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButton: ButtonCircle(
-          tag: 'edit/save',
-          tip: flagEditSave ? 'Edite' : 'Save new management',
-          icon: Icon(flagEditSave ? Icons.edit : Icons.save_alt, color: global.themeAppDark ? global.ColorTheme().colorFromDarkSub : global.ColorTheme().colorDeepDark,),
+        floatingActionButton: flagSave ? ButtonCircle(
+          tag: 'save',
+          tip: 'Save new management',
+          icon: Icon(Icons.save_alt, color: global.themeAppDark ? global.ColorTheme().colorFromDarkSub : global.ColorTheme().colorDeepDark,),
           colorBackground: global.themeAppDark ? Colors.white12 : Colors.white,
           colorBorder: Colors.transparent,
           onPressed: () {
-            flagEditSave = !flagEditSave;
             flagQuantity = false;
             flagProduction = false;
             flagRipe = false;
             flagRotten = false;
-
-            if(flagEditSave){
-              //print("save");
-              addToDatabase();
-            }
+            addToDatabase();
+            checkSave=[nullQuantity, nullProduction, nullRipe, nullRotten, nullDate];
             initiateSetState();
           },
 
-        ),
+        ) : const SizedBox(),
 
 
         body:
@@ -145,29 +158,19 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
                     children: [
 
                       /// Top View
-
                         buildTopView(),
+                      /// Top View
 
                       /// Body management --------------------------------------
                       buildGeneralManagement(),
+                      /// Body management --------------------------------------
 
                       /// RIPE-ROTTEN ------------------------------------------
                       buildRipeRottenWidget(),
+                      /// RIPE-ROTTEN ------------------------------------------
 
                       /// Footer -----------------------------------------------
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child :
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10, left: 10),
-                            child: Text(
-                              'Planted ${nullDate.toDate().day} / ${nullDate.toDate().month} / ${nullDate.toDate().year}',
-                              style: TextStyle(fontSize: 16, color: global.themeAppDark ? Colors.white70 : Colors.black,
-                                  fontWeight: FontWeight.w400, fontFamily: 'meri'),
-                            ),
-                          )
-                      ),
-
+                      buildFooterView(),
                       /// Footer -----------------------------------------------
 
                     ],
@@ -194,8 +197,6 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
                 mainAxisAlignment: orientationPortrait ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-
-
                   GestureDetector(
                     onTap: (){
                       flagRipe=!flagRipe;
@@ -241,7 +242,7 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
                               ]
                           ),
 
-                            (flagRipe&& !flagEditSave)? SlideAnimationController(child:buildValueButtonCircle({'ripe':nullRipe}))
+                            (flagRipe)? SlideAnimationController(child:buildValueButtonCircle({'ripe':nullRipe}))
                               : const SizedBox(),
 
                         ],
@@ -301,7 +302,7 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
                       ),
 
 
-                        (flagRotten && !flagEditSave)? SlideAnimationController(child: buildValueButtonCircle({'rotten':nullRotten}))
+                        (flagRotten)? SlideAnimationController(child: buildValueButtonCircle({'rotten':nullRotten}))
                           : const SizedBox(),
                     ],
                   ))),
@@ -352,9 +353,8 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
                       onPressed: () {
                         /*
                                                     TODO Notification management show dialog
-                                                     */
+                                                    */
                       },
-
                     ),
                   )
               ),
@@ -370,11 +370,8 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
                       colorBackground: global.themeAppDark ? Colors.white12 : Colors.white,
                       colorBorder: Colors.transparent,
                       onPressed: () {
-                        /*
-                                                    TODO Settings management show dialog
-                                                     */
+                        showDialogSettingsManagement();
                       },
-
                     ),
                   )
               )
@@ -399,7 +396,6 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
             // DEEP BLUE DARK
             colors: global.themeAppDark ? global.ColorTheme().colorsViewSubBackgroundDark
                 : global.ColorTheme().colorsViewNormalBackgroundLight,
-
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -418,11 +414,9 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
 
                   GestureDetector(
                     onTap: (){
-                      if (!flagEditSave) {
                         flagQuantity = !flagQuantity;
                         flagProduction = false;
                         initiateSetState();
-                      }
                     },
                     child: ListTile(
                       title: Row(
@@ -456,7 +450,7 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
                     ),
                   ),
 
-                  flagQuantity && !flagEditSave ?
+                  flagQuantity?
                   buildValueButtonCircle({'qtty' : nullQuantity}) : const SizedBox()
                 ]
             )
@@ -478,12 +472,11 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
 
                   GestureDetector(
                     onTap: (){
-                      if (!flagEditSave) {
                         flagProduction = !flagProduction;
                         flagQuantity = false;
 
                         initiateSetState();
-                      }
+
                     },
                     child: ListTile(
                       title: Row(
@@ -517,7 +510,7 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
                     ),
                   ),
 
-                  flagProduction && !flagEditSave ?
+                  flagProduction ?
                   buildValueButtonCircle({'prod':nullProduction}) : const SizedBox()
                 ])
             )
@@ -526,6 +519,22 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
         ),
       ));
   }
+
+  Widget buildFooterView() {
+    return Align(
+        alignment: Alignment.bottomLeft,
+        child :
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10, left: 10),
+          child: Text(
+            'Planted ${nullDate.toDate().day.toString().padLeft(2, '0')}/${nullDate.toDate().month.toString().padLeft(2, '0')}/${nullDate.toDate().year} at ${nullDate.toDate().hour.toString().padLeft(2, '0')} : ${nullDate.toDate().minute.toString().padLeft(2, '0')}',
+            style: TextStyle(fontSize: 16, color: global.themeAppDark ? Colors.white70 : Colors.black,
+                fontWeight: FontWeight.w400, fontFamily: 'meri'),
+          ),
+        )
+    );
+  }
+
 
   Widget buildValueButtonCircle(Map<String,dynamic> value){
     var res = value[value.keys.first];
@@ -554,6 +563,8 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
                     nullRotten = res;
                     break;
                 }
+
+                initiateSetState();
               }),
               onLongPress: () => setState(() {
                 timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
@@ -598,11 +609,14 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
                       break;
                   }
                 });
+
+
               }),
 
               onLongPressEnd: (_) => setState(() {
                 //print(timer!.tick.toString());
                 timer?.cancel();
+                initiateSetState();
               }),
               child:
               Container(
@@ -639,6 +653,7 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
                     nullRotten = res;
                     break;
                 }
+                initiateSetState();
               }),
               onLongPress: () => setState(() {
                 timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
@@ -692,6 +707,7 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
 
               onLongPressEnd: (_) => setState(() {
                 timer?.cancel();
+                initiateSetState();
               }),
               child:
               Container(
@@ -712,6 +728,160 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
     );
   }
 
+
+  Future<void> showDialogSettingsManagement() {
+    late bool flagSizeValue = nullSettings[0];
+    late bool flagShowDate = nullSettings[0];
+
+    TimeOfDay? timePlanted = TimeOfDay.fromDateTime(nullDate.toDate());
+    DateTime? datePlanted = nullDate.toDate();
+
+    return showDialog(
+        context: context,
+        builder:
+        (context) => StatefulBuilder(builder : (context, setState)  =>  AlertDialog(
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+        title: const Center(child:
+        SlideAnimationController(
+            delay: 300,
+            child:
+            Text('Settings management', style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w400,
+              fontFamily: 'RobotMono',
+              fontSize: 24,)),
+        ),),
+
+        content: SlideAnimationController(
+            delay: 800,
+            child:
+             Column(
+               mainAxisAlignment: MainAxisAlignment.center,
+               mainAxisSize: MainAxisSize.min,
+               children: [
+
+                 ListTile(
+                   leading: const Icon(Icons.science),
+                   title: const Text('Change size', style: TextStyle(
+                     color: Colors.black,
+                     fontWeight: FontWeight.w400,
+                     fontFamily: 'RobotMono',
+                     fontSize: 12,)),
+                   subtitle: Text(flagSizeValue ? 'Kilogram' : 'Gram', style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
+                       : Colors.green)),
+                   trailing: Switch(
+                       value: flagSizeValue,
+                       activeColor: Colors.redAccent,
+                       onChanged: (val) {
+                         setState(() {
+                           flagSizeValue = val;
+                         });
+                       }),
+                 ),
+
+                 ListTile(
+                   leading: const Icon(Icons.slideshow),
+                   title: const Text('Show date', style: TextStyle(
+                     color: Colors.black,
+                     fontWeight: FontWeight.w400,
+                     fontFamily: 'RobotMono',
+                     fontSize: 12,)),
+                   subtitle: Text(flagShowDate ? 'Yes' : 'No', style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
+                       : Colors.green)),
+                   trailing: Switch(
+                       value: flagShowDate,
+                       activeColor: Colors.redAccent,
+                       onChanged: (val) {
+                         setState(() {
+                           flagShowDate = val;
+                         });
+                       }),
+                 ),
+
+                 ListTile(
+                   leading: const Icon(Icons.slideshow),
+                   title: const Text('Planted date', style: TextStyle(
+                     color: Colors.black,
+                     fontWeight: FontWeight.w400,
+                     fontFamily: 'RobotMono',
+                     fontSize: 12,)),
+                   subtitle: Text(
+                       '${datePlanted!.day.toString().padLeft(2, '0')}/${datePlanted!.month.toString().padLeft(2, '0')}/${datePlanted!.year}',
+                       style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
+                       : Colors.green, fontSize: 12)
+                   ),
+                   trailing: IconButton(
+                     icon: const Icon(Icons.date_range),
+                     onPressed: ()  async
+                     {
+                       datePlanted = await showDatePicker(context: context, initialDate: nullDate.toDate(), firstDate: DateTime(DateTime.now().year), lastDate: DateTime(DateTime.now().year+5));
+                       setState(() {
+                       });
+                     },
+                   ),
+                 ),
+
+                 ListTile(
+                   leading: const Icon(Icons.slideshow),
+                   title: const Text('Planted time', style: TextStyle(
+                     color: Colors.black,
+                     fontWeight: FontWeight.w400,
+                     fontFamily: 'RobotMono',
+                     fontSize: 12,)),
+                   subtitle: Text('${timePlanted!.hour.toString().padLeft(2, '0')} :${timePlanted!.minute.toString().padLeft(2, '0')}', style: TextStyle( color : global.themeAppDark ? global.ColorTheme().colorFromDarkSub
+                       : Colors.green, fontSize: 12)
+                   ),
+                   trailing: IconButton(
+                     icon: const Icon(Icons.access_time),
+                     onPressed: ()
+                     async {
+                       timePlanted = await showTimePicker(context: context, initialTime: TimeOfDay(hour: nullDate.toDate().hour, minute: nullDate.toDate().minute));
+                       setState(() {
+                       });
+
+                       },
+                   ),
+                 ),
+               ],
+             )
+        ),
+
+        actions: <Widget>[
+          ButtonRect(
+              title: "Cancel",
+              colorBorder: Colors.transparent,
+              colorBackground: Colors.transparent,
+              colorHover: Colors.black,
+              colorText: global.ColorTheme().colorDeepDark,
+              onclickButton: () {
+                setState(() =>Navigator.pop(context));
+              },
+              onHoverMouse: (val) {}
+          ),
+
+          ButtonRect(
+              title: "Apply",
+              colorBorder: Colors.transparent,
+              colorBackground: Colors.transparent,
+              colorHover: Colors.black,
+              colorText: global.ColorTheme().colorDeepDark,
+              onclickButton: () {
+                nullDate = Timestamp.fromDate(DateTime(datePlanted!.year, datePlanted!.month, datePlanted!.day, timePlanted!.hour, timePlanted!.minute));
+                initiateSetState();
+
+                setState(() =>Navigator.pop(context));
+
+              },
+              onHoverMouse: (val) {}
+          ),
+
+        ],
+      ),
+    ));
+  }
+
   void addToDatabase(){
     global.currentUser.myGarden[widget.item.idKey] =
     {
@@ -719,8 +889,9 @@ class _UserGardenItemScreenState extends State<UserGardenItemScreen> {
       'production' : nullProduction,
       'ripe' : nullRipe,
       'rotten' : nullRotten,
-      'notification' : nullNotification,
       'date' : nullDate,
+      'notification' : nullNotification,
+      'settings' : nullSettings,
     };
     
     try {

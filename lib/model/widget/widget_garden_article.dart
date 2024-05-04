@@ -23,7 +23,7 @@ class GardenArticleWidget extends StatefulWidget {
   State<GardenArticleWidget>  createState() => _GardenArticleWidgetState();
 
 }
-  class _GardenArticleWidgetState extends State<GardenArticleWidget> {
+class _GardenArticleWidgetState extends State<GardenArticleWidget> {
 
   late bool flagOnHover = false;
 
@@ -42,97 +42,116 @@ class GardenArticleWidget extends StatefulWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
 
-      height: widget.height,
+        onTap: () async {
+          flagOnHover= true;
+          setState(() {
 
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        color: const Color(0xFFFFFFFF),
+          });
+          gardenArticleWidget();
+        },
+        child : Container(
+            height: widget.height,
 
-    ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: const Color(0xFFFFFFFF),
 
-        child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-
-          Container(
-                height: (global.currentPlatform=='and' || global.currentPlatform=='ios') ? widget.height*0.5 :  widget.height/2,
-                width: widget.width,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage("https://${widget.article.information['image']}"),
-                      fit: BoxFit.cover
-                  ),
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(30.0)),)
-          ),
-
-           SizedBox(
-            width: widget.width,
+            ),
 
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                    Text(
-                        widget.article.title,
-                        style: const TextStyle(
-                          color:  Colors.black,
-                          fontFamily: 'meri',
-                          fontWeight: FontWeight.w800,
-                          fontSize: 18,
-                        )
-                    ),
 
-                ButtonTextDivider(
-                  title: 'Learn More',
-                  colorText: flagOnHover  ? Colors.green : Colors.black,
-                  colorDivider: flagOnHover  ? Colors.green : Colors.black,
-                  onclickButton: () async {
-                    flagOnHover= true;
-                    setState(() {
-
-                    });
-                    await Future.delayed(const Duration(milliseconds: 800), () {setState(() {flagOnHover=false;});});
-
-                    Navigator.push( // push -> Add route on stack
-                      context,
-                      FadeInRoute( // FadeInRoute  // ZoomInRoute  // RotationInRoute
-                        page: GardenArticleInfoScreen(
-                            from: "search",
-                            function: initiateSetState,
-                            item: GardenItem(
-                              idKey: widget.article.title,
-                              scientist:  widget.article.information['sc'],
-                              species:  widget.article.information['species'],
-                              product:  widget.article.information['product'],
-                              description:  widget.article.information['description'],
-                              environment: widget.article.information['environment'],
-                              farm: widget.article.information['farm'],
-                              sprinkle: widget.article.information['sprinkle'],
-                              prune: widget.article.information['prune'],
-                              harvest: widget.article.information['harvest'],
-                              image: widget.article.information['image'],
-                            )), //ContactScreen(),
-                        routeName: '/search/${widget.article.title}',
+                Container(
+                    height: (global.currentPlatform=='and' || global.currentPlatform=='ios') ? widget.height*0.5 :  widget.height/2,
+                    width: widget.width,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage("https://${widget.article.information['image']}"),
+                          fit: BoxFit.cover
                       ),
-                    );
-
-                  },
-                  widthDivider: flagOnHover? 60 : 30,
-                  onHoverMouse: (val ) {
-                      flagOnHover = val;
-                      setState(() {
-
-                      });
-                  },
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(30.0)),)
                 ),
-              ],
-            ),
-          )
 
-        ],
-      )
-    );
+                SizedBox(
+                  width: widget.width,
+
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                          widget.article.title,
+                          style: const TextStyle(
+                            color:  Colors.black,
+                            fontFamily: 'meri',
+                            fontWeight: FontWeight.w800,
+                            fontSize: 18,
+                          )
+                      ),
+
+                      ButtonTextDivider(
+                        title: 'Learn More',
+                        colorText: flagOnHover  ? Colors.green : Colors.black,
+                        colorDivider: flagOnHover  ? Colors.green : Colors.black,
+                        onclickButton: () async {
+                          flagOnHover= true;
+                          setState(() {
+
+                          });
+
+                          gardenArticleWidget();
+                        },
+                        widthDivider: flagOnHover? 60 : 30,
+                        onHoverMouse: (val ) {
+                          flagOnHover = val;
+                          setState(() {
+
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                )
+
+              ],
+            )
+        ));
+  }
+
+
+  Future<void> gardenArticleWidget() async{
+
+    return
+      await Future.delayed(const Duration(milliseconds: 800), () {setState(() {
+        flagOnHover=false;
+
+        Navigator.push( // push -> Add route on stack
+          context,
+          FadeInRoute( // FadeInRoute  // ZoomInRoute  // RotationInRoute
+            page: GardenArticleInfoScreen(
+                from: "search",
+                function: initiateSetState,
+                item: GardenItem(
+                  idKey: widget.article.title,
+                  scientist:  widget.article.information['sc'],
+                  species:  widget.article.information['species'],
+                  product:  widget.article.information['product'],
+                  description:  widget.article.information['description'],
+                  environment: widget.article.information['environment'],
+                  farm: widget.article.information['farm'],
+                  sprinkle: widget.article.information['sprinkle'],
+                  prune: widget.article.information['prune'],
+                  harvest: widget.article.information['harvest'],
+                  image: widget.article.information['image'],
+                )), //ContactScreen(),
+            routeName: '/search/${widget.article.title}',
+          ),
+        );});});
+
+
+
   }
 
 }

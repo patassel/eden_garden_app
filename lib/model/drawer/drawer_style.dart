@@ -2,6 +2,8 @@ import 'package:eden_garden/view/garden_screen.dart';
 import 'package:eden_garden/view/home_screen.dart';
 import 'package:eden_garden/view/search_screen.dart';
 import 'package:eden_garden/view/settings_screen.dart';
+import 'package:eden_garden/view/user/user_community_screen.dart';
+import 'package:eden_garden/view/user/user_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:eden_garden/controllers/drawer_route.dart';
 
@@ -63,6 +65,7 @@ class AppDrawer extends StatelessWidget {
             //currentAccountPicture: ,
 
           ),
+          /// My account
           DrawerRoute("Account", "/home" , Icon(Icons.home, color: global.ColorTheme().colorFromDark,), const HomeScreen(from: "drawer"), from=="home"? "pushReplacement" : "push", function!),
 
           /// Garden library
@@ -70,12 +73,23 @@ class AppDrawer extends StatelessWidget {
 
           /// My Eden garden
           DrawerRoute("Eden garden", "/garden" , Icon(Icons.menu_book, color: global.ColorTheme().colorFromDark,), const GardenScreen(from: "drawer"), from=="garden"? "pushReplacement" : "push", function!),
+          Divider(height: 1, color: global.ColorTheme().colorFromDark),
+          ///-------------------------------------------------------------------
 
-          /// Contact
+          /// My account
+          DrawerRoute("Personal information", "/$from/userInfo" , Icon(Icons.person, color: global.ColorTheme().colorFromDark,), UserInfoScreen(from: "drawer", user: global.currentUser,), "push", function!),
 
+          /// Garden library
+          DrawerRoute("Community", "/$from/community" , Icon(Icons.people_alt_rounded, color: global.ColorTheme().colorFromDark,), UserCommunityScreen(from: "drawer", user: global.currentUser, function: function,), "push", function!),
+
+          /// My Eden garden
+          DrawerRoute("Garden statistics", "/$from/statistics" , Icon(Icons.bar_chart_sharp, color: global.ColorTheme().colorFromDark,), const GardenScreen(from: "drawer"), from=="garden"? "pushReplacement" : "push", function!),
+          Divider(height: 1, color: global.ColorTheme().colorFromDark),
+          ///-------------------------------------------------------------------
 
           Divider(height: 1, color: global.ColorTheme().colorFromDark),
           DrawerRoute("Settings", "/settings" , Icon(Icons.settings, color: global.ColorTheme().colorFromDark,), SettingsScreen(from: "drawer", function: function!,),  "push", function!),
+          /// Contact
 
           /// Help
 

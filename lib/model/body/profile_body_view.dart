@@ -1,151 +1,263 @@
 import 'package:eden_garden/controllers/route_management.dart';
+import 'package:eden_garden/view/gardenStatistics/general_garden_statistics.dart';
+import 'package:eden_garden/view/user/user_community_screen.dart';
 import 'package:eden_garden/view/user/user_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:eden_garden/controllers/globals.dart' as global;
 
-
 /// Button Rect on View with border color
 
 class ProfileBodyView extends StatelessWidget {
-
   final bool profileZoom;
   final double screenWidth;
+  final Function()? function;
 
-  const ProfileBodyView({Key? key, required this.profileZoom, required this.screenWidth})
+  const ProfileBodyView(
+      {Key? key,
+      required this.profileZoom,
+      required this.screenWidth,
+      this.function})
       : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
-    return
-      Container(
+    return Container(
         width: screenWidth,
-          padding: const EdgeInsets.only(top: 12, bottom: 12),
-          decoration:
-          BoxDecoration(
-              gradient: LinearGradient(
-                // DEEP BLUE DARK
-                colors: global.themeAppDark ? global.ColorTheme().colorsViewSubBackgroundDark
-                    : global.ColorTheme().colorsViewNormalBackgroundLight,
+        padding: const EdgeInsets.only(top: 12, bottom: 12),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            // DEEP BLUE DARK
+            colors: global.themeAppDark
+                ? global.ColorTheme().colorsViewSubBackgroundDark
+                : global.ColorTheme().colorsViewNormalBackgroundLight,
 
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-
-      ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                /// BODY VIEW  ---------------------------------------------------
-                ListTile(
-                    title: Text("Personal information",
-
-                        style: TextStyle(
-                          color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,
-                          fontWeight: FontWeight.w400,
-                        fontFamily: 'meri',
-                        fontSize: 16,)
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            /// BODY VIEW  ---------------------------------------------------
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    // push -> Add route on stack
+                    context,
+                    FadeInRoute(
+                      // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                      page: UserInfoScreen(
+                        from: "home",
+                        user: global.currentUser,
+                      ),
+                      //ContactScreen(),
+                      routeName: '/home/userInfo',
                     ),
+                  );
+                },
+                child: ListTile(
+                    title: Text("Personal information",
+                        style: TextStyle(
+                          color: global.themeAppDark
+                              ? global.ColorTheme().colorFromDark
+                              : global.ColorTheme().colorFromLight,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'meri',
+                          fontSize: 16,
+                        )),
                     //subtitle: Text(global.currentUser.myGardenObject[index].species),
-                    leading: Icon(Icons.person, color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
-                    trailing:  IconButton(
-                      icon : Icon(Icons.read_more,color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
+                    leading: Icon(
+                      Icons.person,
+                      color: global.themeAppDark
+                          ? global.ColorTheme().colorFromDark
+                          : global.ColorTheme().colorFromLight,
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.read_more,
+                        color: global.themeAppDark
+                            ? global.ColorTheme().colorFromDark
+                            : global.ColorTheme().colorFromLight,
+                      ),
                       onPressed: () {
-                        Navigator.push(  // push -> Add route on stack
+                        Navigator.push(
+                          // push -> Add route on stack
                           context,
-                          FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
-                            page: UserInfoScreen(from: "home", user: global.currentUser,), //ContactScreen(),
-                            routeName: '/userInfo',
+                          FadeInRoute(
+                            // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                            page: UserInfoScreen(
+                              from: "home",
+                              user: global.currentUser,
+                            ),
+                            //ContactScreen(),
+                            routeName: '/home/userInfo',
                           ),
                         );
                       },
-                    )),
+                    ))),
 
-                SizedBox(
-                  width: screenWidth,
-                  child: const Divider(
-                    color: Colors.black12,
-                    thickness: 2,
-                  ),),
+            SizedBox(
+              width: screenWidth,
+              child: const Divider(
+                color: Colors.black12,
+                thickness: 2,
+              ),
+            ),
 
-
-                ListTile(
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    // push -> Add route on stack
+                    context,
+                    FadeInRoute(
+                      // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                      page: UserCommunityScreen(
+                        from: "home",
+                        user: global.currentUser,
+                        function: function,
+                      ), //ContactScreen(),
+                      routeName: '/home/community',
+                    ),
+                  );
+                },
+                child: ListTile(
                     title: Text("Community",
                         style: TextStyle(
-                          color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,
+                          color: global.themeAppDark
+                              ? global.ColorTheme().colorFromDark
+                              : global.ColorTheme().colorFromLight,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'meri',
-                          fontSize: 16,)
-                    ),
+                          fontSize: 16,
+                        )),
                     //subtitle: Text(global.currentUser.myGardenObject[index].species),
-                    leading: Icon(Icons.people_alt_rounded, color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
-                    trailing:  IconButton(
-                      icon : Icon(Icons.read_more,color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
+                    leading: Icon(
+                      Icons.people_alt_rounded,
+                      color: global.themeAppDark
+                          ? global.ColorTheme().colorFromDark
+                          : global.ColorTheme().colorFromLight,
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.read_more,
+                        color: global.themeAppDark
+                            ? global.ColorTheme().colorFromDark
+                            : global.ColorTheme().colorFromLight,
+                      ),
                       onPressed: () {
-                        /*Navigator.push(  // push -> Add route on stack
+                        Navigator.push(
+                          // push -> Add route on stack
                           context,
-                          FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
-                            page: UserInfoScreen(from: "home", user: global.currentUser,), //ContactScreen(),
-                            routeName: '/userInfo',
+                          FadeInRoute(
+                            // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                            page: UserCommunityScreen(
+                              from: "home",
+                              user: global.currentUser,
+                              function: function,
+                            ), //ContactScreen(),
+                            routeName: '/home/community',
                           ),
                         );
-
-                         */
                       },
-                    )),
-                SizedBox(
-                  width: screenWidth,
-                  child: const Divider(
-                    color: Colors.black12,
-                    thickness: 2,
-                  ),),
 
-                ListTile(
+                    ))),
+            SizedBox(
+              width: screenWidth,
+              child: const Divider(
+                color: Colors.black12,
+                thickness: 2,
+              ),
+            ),
+
+            GestureDetector(
+                onTap: () {
+
+                  Navigator.push(
+                    // push -> Add route on stack
+                    context,
+                    FadeInRoute(
+                      // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                      page: const GeneralGardenStatistics(
+                        from: "home",
+                      ), //ContactScreen(),
+                      routeName: '/home/statistics',
+                    ),
+                  );
+
+                },
+                child: ListTile(
                     title: Text("Garden statistics",
                         style: TextStyle(
-                          color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,
+                          color: global.themeAppDark
+                              ? global.ColorTheme().colorFromDark
+                              : global.ColorTheme().colorFromLight,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'meri',
-                          fontSize: 16,)
-                    ),
+                          fontSize: 16,
+                        )),
                     //subtitle: Text(global.currentUser.myGardenObject[index].species),
-                    leading: Icon(Icons.bar_chart_sharp, color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
-                    trailing:  IconButton(
-                      icon : Icon(Icons.read_more,color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
+                    leading: Icon(
+                      Icons.bar_chart_sharp,
+                      color: global.themeAppDark
+                          ? global.ColorTheme().colorFromDark
+                          : global.ColorTheme().colorFromLight,
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.read_more,
+                        color: global.themeAppDark
+                            ? global.ColorTheme().colorFromDark
+                            : global.ColorTheme().colorFromLight,
+                      ),
                       onPressed: () {
-                        /*Navigator.push(  // push -> Add route on stack
+                        Navigator.push(
+                          // push -> Add route on stack
                           context,
-                          FadeInRoute(  // FadeInRoute  // ZoomInRoute  // RotationInRoute
-                            page: UserInfoScreen(from: "home", user: global.currentUser,), //ContactScreen(),
-                            routeName: '/userInfo',
+                          FadeInRoute(
+                            // FadeInRoute  // ZoomInRoute  // RotationInRoute
+                            page: const GeneralGardenStatistics(
+                              from: "home",
+                            ), //ContactScreen(),
+                            routeName: '/home/statistics',
                           ),
                         );
-
-                         */
                       },
-                    )),
+                    ))),
 
+            SizedBox(
+              width: screenWidth,
+              child: const Divider(
+                color: Colors.black12,
+                thickness: 10,
+              ),
+            ),
 
-              SizedBox(
-                width: screenWidth,
-                child: const Divider(
-                  color: Colors.black12,
-                  thickness: 10,
-                ),),
-
-
-                ListTile(
+            GestureDetector(
+                onTap: () {},
+                child: ListTile(
                     title: Text("Privacy",
                         style: TextStyle(
-                          color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,
+                          color: global.themeAppDark
+                              ? global.ColorTheme().colorFromDark
+                              : global.ColorTheme().colorFromLight,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'meri',
-                          fontSize: 16,)
-                    ),
+                          fontSize: 16,
+                        )),
                     //subtitle: Text(global.currentUser.myGardenObject[index].species),
-                    leading: Icon(Icons.privacy_tip, color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
-                    trailing:  IconButton(
-                      icon : Icon(Icons.read_more,color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
+                    leading: Icon(
+                      Icons.privacy_tip,
+                      color: global.themeAppDark
+                          ? global.ColorTheme().colorFromDark
+                          : global.ColorTheme().colorFromLight,
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.read_more,
+                        color: global.themeAppDark
+                            ? global.ColorTheme().colorFromDark
+                            : global.ColorTheme().colorFromLight,
+                      ),
                       onPressed: () {
                         /*Navigator.push(  // push -> Add route on stack
                           context,
@@ -154,29 +266,43 @@ class ProfileBodyView extends StatelessWidget {
                             routeName: '/userInfo',
                           ),
                         );
-
                          */
                       },
-                    )),
-                SizedBox(
-                  width: screenWidth,
-                  child: const Divider(
-                    color: Colors.black12,
-                    thickness: 2,
-                  ),),
+                    ))),
+            SizedBox(
+              width: screenWidth,
+              child: const Divider(
+                color: Colors.black12,
+                thickness: 2,
+              ),
+            ),
 
-                ListTile(
+            GestureDetector(
+                onTap: () {},
+                child: ListTile(
                     title: Text("Notifications",
                         style: TextStyle(
-                          color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,
+                          color: global.themeAppDark
+                              ? global.ColorTheme().colorFromDark
+                              : global.ColorTheme().colorFromLight,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'meri',
-                          fontSize: 16,)
-                    ),
+                          fontSize: 16,
+                        )),
                     //subtitle: Text(global.currentUser.myGardenObject[index].species),
-                    leading: Icon(Icons.notifications, color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
-                    trailing:  IconButton(
-                      icon : Icon(Icons.read_more,color: global.themeAppDark ? global.ColorTheme().colorFromDark  : global.ColorTheme().colorFromLight ,),
+                    leading: Icon(
+                      Icons.notifications,
+                      color: global.themeAppDark
+                          ? global.ColorTheme().colorFromDark
+                          : global.ColorTheme().colorFromLight,
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.read_more,
+                        color: global.themeAppDark
+                            ? global.ColorTheme().colorFromDark
+                            : global.ColorTheme().colorFromLight,
+                      ),
                       onPressed: () {
                         /*Navigator.push(  // push -> Add route on stack
                           context,
@@ -188,25 +314,38 @@ class ProfileBodyView extends StatelessWidget {
 
                          */
                       },
-                    )),
-                SizedBox(
-                  width: screenWidth,
-                  child: const Divider(
-                    color: Colors.black12,
-                    thickness: 10,
-                  ),),
-                ListTile(
+                    ))),
+            SizedBox(
+              width: screenWidth,
+              child: const Divider(
+                color: Colors.black12,
+                thickness: 10,
+              ),
+            ),
+
+            /// DELETE ACCOUNT
+            /// TODO
+            /// DOUBLE CHECK FOR USER WANT TO DELETE HIS ACCOUNT + PASSWORD OR EMAIL CHECK
+            GestureDetector(
+                onTap: () {},
+                child: ListTile(
                     title: Text("Delete my account",
                         style: TextStyle(
                           color: Colors.red.shade600,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'meri',
-                          fontSize: 16,)
-                    ),
+                          fontSize: 16,
+                        )),
                     //subtitle: Text(global.currentUser.myGardenObject[index].species),
-                    leading: Icon(Icons.no_accounts, color: Colors.red.shade600,),
-                    trailing:  IconButton(
-                      icon : Icon(Icons.read_more, color: Colors.red.shade600,),
+                    leading: Icon(
+                      Icons.no_accounts,
+                      color: Colors.red.shade600,
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.read_more,
+                        color: Colors.red.shade600,
+                      ),
                       onPressed: () {
                         /*Navigator.push(  // push -> Add route on stack
                           context,
@@ -218,11 +357,10 @@ class ProfileBodyView extends StatelessWidget {
 
                          */
                       },
-                    )),
+                    ))),
 
-                ///---------------------------------------------------------------
-
-            ],
-    ));
+            ///---------------------------------------------------------------
+          ],
+        ));
   }
 }
