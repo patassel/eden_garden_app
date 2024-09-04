@@ -1,4 +1,4 @@
-# Eden Garden App(in progress -> Begin 29/10/22)
+# Eden Garden App(first project at school)
 
 This application is available on Web, Android, Windows and IOS soon.
 
